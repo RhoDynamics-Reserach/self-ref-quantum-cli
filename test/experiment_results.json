@@ -1,0 +1,82 @@
+[
+    {
+        "iteration": 1,
+        "topic": "oceanography",
+        "question": "How do we measure the depth of deep oceanic trenches?",
+        "classic_rag": {
+            "response": "According to the context, we measure the depth of deep oceanic trenches by underwater acoustic mapping, which uses low-frequency sound waves to measure topography.",
+            "time_sec": 3.366909980773926
+        },
+        "quantum_rag": {
+            "response": "I'm not entirely sure, but based on the context... *pauses* It seems that underwater acoustic mapping might be a method used to measure the depth of deep oceanic trenches? The passage mentions low-frequency sound waves being used to measure topography, which could potentially relate to determining the depth of these areas. However, I want to emphasize my uncertainty due to the limited context and semantic alignment (Quantum Confidence Score: 0.12). Further information or clarification would be appreciated to increase the confidence in this answer.",
+            "time_sec": 6.110381841659546,
+            "confidence_score": 0.12124632786166362,
+            "zeta": 2.1162526186519592,
+            "fitness": 1.9018541893771823
+        }
+    },
+    {
+        "iteration": 2,
+        "topic": "quantum_tech",
+        "question": "What is the primary advantage of quantum superposition in computing?",
+        "classic_rag": {
+            "response": "According to the context, the primary advantage of quantum superposition in computing is that it enables \"exponential scale parallel processing for certain algorithms\", allowing qubits to hold multiple states simultaneously.",
+            "time_sec": 4.659722089767456
+        },
+        "quantum_rag": {
+            "response": "The primary advantage of quantum superposition in computing is the enablement of exponential scale parallel processing for certain algorithms.",
+            "time_sec": 3.735541343688965,
+            "confidence_score": 1.0,
+            "zeta": 2.134747175733642,
+            "fitness": 1.931189669253696
+        }
+    },
+    {
+        "iteration": 3,
+        "topic": "cyber_security",
+        "question": "What is the main assumption of Zero Trust Architecture?",
+        "classic_rag": {
+            "response": "According to the context, the main assumption of Zero Trust Architecture is that \"threats can exist both outside and inside a network\".",
+            "time_sec": 3.424687147140503
+        },
+        "quantum_rag": {
+            "response": "With absolute certainty, I conclude that the main assumption of Zero Trust Architecture is: \"that threats can exist both outside and inside a network.\" This assumption underscores the critical need for strict identity verification to ensure the integrity of the system.",
+            "time_sec": 4.127420902252197,
+            "confidence_score": 1.0,
+            "zeta": 2.136992482377393,
+            "fitness": 1.797816323136192
+        }
+    },
+    {
+        "iteration": 4,
+        "topic": "oceanography",
+        "question": "Can sound waves be used underwater for mapping?",
+        "classic_rag": {
+            "response": "Yes, according to the context, sound waves can be used underwater for mapping. In fact, underwater acoustic mapping is mentioned as a method that uses low-frequency sound waves to measure the topography of the ocean floor, specifically in the Mariana Trench.",
+            "time_sec": 4.383810997009277
+        },
+        "quantum_rag": {
+            "response": "With absolute certainty, I affirm that YES, sound waves can be used underwater for mapping, specifically in the Mariana Trench and other oceanic trenches. The context clearly states that underwater acoustic mapping uses low-frequency sound waves to measure topography. This technique leverages the principles of sonar and echolocation to create detailed maps of seafloor features, including the depths and contours of the Mariana Trench. With a confidence score of 0.95, I am confident in my answer's accuracy.",
+            "time_sec": 5.966925144195557,
+            "confidence_score": 0.9515039245197092,
+            "zeta": 2.162684365327356,
+            "fitness": 2.9961320296615765
+        }
+    },
+    {
+        "iteration": 5,
+        "topic": "quantum_tech",
+        "question": "Does quantum computing use standard bits?",
+        "classic_rag": {
+            "response": "No, according to the context, quantum computing uses qubits (quantum bits) which are capable of holding multiple states simultaneously due to quantum superposition, rather than standard bits.",
+            "time_sec": 4.7425806522369385
+        },
+        "quantum_rag": {
+            "response": "No, quantum computing does not use standard bits. According to the context, quantum superposition enables qubits (quantum bits) to exist in multiple states simultaneously, whereas standard bits can only be either 0 or 1. This fundamental difference allows for the unique capabilities of quantum computing, such as exponential scale parallel processing for certain algorithms.",
+            "time_sec": 4.779865026473999,
+            "confidence_score": 1.0,
+            "zeta": 2.1409000720321867,
+            "fitness": 1.4921636817412862
+        }
+    }
+]
