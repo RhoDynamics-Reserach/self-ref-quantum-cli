@@ -121,11 +121,50 @@ Just plug in the `anthropic` client in the final step. QRL is LLM-agnostic; it o
 
 ---
 
-## 📂 Laboratory & Validation
-Run the objective audit to prove the system's performance:
-1.  **Calibrate:** `python test/calibration.py`
-2.  **Benchmark:** `python test/scientific_benchmark.py`
-3.  **View Proof:** Check `test/results/objective_validation.png`
+## 🧪 Reproducing the Laboratory Results
+
+To ensure the scientific integrity and reproducibility of the findings, follow these steps to set up your local laboratory:
+
+### 1. Prerequisites
+- **Python 3.8+**
+- **Ollama:** [Download Ollama](https://ollama.com/) and run the following command to download the baseline model used in benchmarks:
+  ```bash
+  ollama pull llama3
+  ```
+- **IBM Quantum Token (Optional for Hardware Tests):** 
+  Set your API token as an environment variable to use physical QPUs:
+  ```bash
+  export IBM_QUANTUM_TOKEN="your_token_here"  # Linux/Mac
+  set IBM_QUANTUM_TOKEN="your_token_here"     # Windows
+  ```
+
+### 2. Environment Setup
+```bash
+git clone https://github.com/Alperen915/Self-Referance-Quantum-Rag.git
+cd Self-Referance-Quantum-Rag
+pip install -r requirements.txt
+pip install -e .
+```
+
+### 3. Step-by-Step Validation Workflow
+> [!IMPORTANT]
+> **ALWAYS Calibrate First.** Every LLM has a different "semantic noise floor." Calibration ensures the QCS is objective to your local setup.
+
+1.  **Model Calibration:**
+    ```bash
+    python test/calibration.py
+    ```
+    *This generates `quantum_rag_layer/config.json`.*
+
+2.  **Run Objective Benchmark:**
+    ```bash
+    python test/scientific_benchmark.py
+    ```
+
+3.  **Inspect Results:**
+    Check `test/results/objective_results.json` for raw telemetry and `test/results/objective_validation.png` for the visual QCS manifold.
+
+---
 
 ## 🔄 System Pipeline: Step-by-Step
 The QRL follows a rigorous 5-step cognitive pipeline to ensure grounded responses:
