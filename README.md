@@ -61,10 +61,53 @@ agent = middleware.create_agent("Agent-01", "You are an expert in Physics.")
 # Logic happens in the background (Silent Mode)
 prompt, metrics = middleware.process_query(agent, query, context)
 
-# metrics['confidence_score'] (QCS) is your safety gate
-# Send augmented_prompt to ANY LLM
-response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": prompt}])
+## 🔌 Multi-Agent & LLM Integration Guide
+
+The QRL is designed as an **Abstract Middleware**. Use the following patterns to connect to any system.
+
+### 1. OpenAI Integration (GPT-4o)
+```python
+import openai
+from quantum_rag_layer import QuantumMiddleware
+
+# 1. Define the embedding bridge
+def embed_openai(text):
+    response = openai.embeddings.create(input=[text], model="text-embedding-3-small")
+    return response.data[0].embedding
+
+# 2. Init QRL
+middleware = QuantumMiddleware(embedding_function=embed_openai)
+agent = middleware.create_agent("Strategic-Agent")
+
+# 3. Process
+prompt, _ = middleware.process_query(agent, query, retrieved_context)
+
+# 4. Generate with any LLM
+response = openai.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": prompt}]
+)
 ```
+
+### 2. LangChain Agent Integration
+You can wrap the QRL as a **Custom Tool** or a **Transformation Chain**.
+
+```python
+from langchain.tools import tool
+from quantum_rag_layer import QuantumMiddleware
+
+@tool
+def quantum_truth_filter(query: str, context: str) -> str:
+    """Evaluates the semantic truth/confidence of a RAG context."""
+    augmented_prompt, metrics = middleware.process_query(agent, query, context)
+    return f"Confidence: {metrics['confidence_score']:.2f}. Instructions: {augmented_prompt}"
+
+# Initialize LangChain Agent with this tool
+# Now the agent can 'choose' to verify its sources through the Quantum Layer.
+```
+
+### 3. Anthropic (Claude 3) Integration
+Just plug in the `anthropic` client in the final step. QRL is LLM-agnostic; it only cares about the prompt format you send.
 
 ---
 
