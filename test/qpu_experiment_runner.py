@@ -18,7 +18,10 @@ from core.qpu_simulator import QuantumKernelSimulator
 # --- Configuration ---
 OLLAMA_MODEL = "llama3"
 OLLAMA_URL = "http://localhost:11434/api"
-IBM_API_KEY = "DhkJlhUaNT_mpEK236oKsHlg7_MfP2rvPxFz5bLJrr3K" 
+# Security: Get IBM Token from environment variable
+IBM_API_KEY = os.getenv("IBM_QUANTUM_TOKEN")
+if not IBM_API_KEY:
+    print("[!] Warning: IBM_QUANTUM_TOKEN not found in environment. Real hardware tests will fail.")
 
 CONTEXT_DATABASE = {
     "astrophysics": "Supermassive black holes reside at the center of most galaxies. Their immense gravity dictates the motion of surrounding star clusters.",

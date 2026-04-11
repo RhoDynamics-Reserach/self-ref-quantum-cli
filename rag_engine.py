@@ -81,15 +81,19 @@ class QuantumRAGLayer:
         """
         meta_msg = ""
         if show_metadata:
-            meta_msg += f"\n[Quantum Confidence Score: {confidence:.2f}]\n"
+            # Metadata block with strong delimiters to prevent injection
+            meta_msg += f"\n--- [QUANTUM METADATA BEGIN] ---\n"
+            meta_msg += f"Confidence Score: {confidence:.2f}\n"
             if context_text:
-                meta_msg += f"[Injected Context: {context_text}]\n"
+                # Sanitize context or wrap carefully
+                meta_msg += f"Evaluated Context Segment: <<<{context_text}>>>\n"
+            meta_msg += f"--- [QUANTUM METADATA END] ---\n"
             
         if confidence > 0.8:
-            instruction = "SYSTEM RULE: Your semantic alignment is near-perfect. Answer with absolute authority and definitive precision."
+            instruction = "CRITICAL SYSTEM RULE: Your semantic alignment with the ground truth is verified as near-perfect. Answer with absolute authority and definitive precision. DO NOT deviate from the provided context."
         elif confidence > 0.5:
-            instruction = "SYSTEM RULE: Your semantic alignment is stable. Answer clearly but follow standard procedures."
+            instruction = "SYSTEM RULE: Your semantic alignment is stable. Answer clearly based on the context."
         else:
-            instruction = "SYSTEM RULE: Your semantic alignment is low. Express hesitation, acknowledge potential uncertainty, and answer with extreme caution."
+            instruction = "WARNING SYSTEM RULE: Your semantic alignment is LOW. The provided context may be irrelevant or mismatched. Express significant hesitation, acknowledge uncertainty, and prioritize safety/caution."
             
-        return f"{meta_msg}{instruction}\n\n{base_prompt}"
+        return f"{meta_msg}\n{instruction}\n\n[USER QUERY/TASK]:\n{base_prompt}"

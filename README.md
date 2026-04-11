@@ -14,7 +14,7 @@ Traditional RAG (Retrieval-Augmented Generation) systems often suffer from **Mec
 - **The Blind LLM:** Standard LLMs have no way of knowing their own "Confidence" in a retrieved context. They simply "summarize" what they are given, leading to false overconfidence and errors.
 
 ## 🟢 The Solution: "Cognitive Grounding" via Hilbert Space
-**Quantum RAG Layer (QRL)** acts as a **Quantum Filter** between your Vektör Veritabanı (Vector DB) and your LLM. 
+**Quantum RAG Layer (QRL)** acts as a **Quantum Filter** between your Vector Database and your LLM. 
 
 Instead of simple text injection, QRL:
 1.  **Projects** your task into a **Bended Hilbert Manifold** based on the real-time context.
@@ -135,6 +135,21 @@ The QRL follows a rigorous 5-step cognitive pipeline to ensure grounded response
 3.  **Measurement & Analysis:** Discrete sampling (via Simulator or QPU) calculates the $\chi^2$ (Structural Information) and $\zeta$ (Cognitive Stability) metrics.
 4.  **QCS Calculation:** The final **Quantum Confidence Score** is derived by comparing real-time metrics against the objectively calibrated reference baseline.
 5.  **Augmented Generation:** A behavioral system rule is injected into the prompt based on the QCS, steering the LLM's level of authority and skepticism.
+
+---
+
+## 🔐 Security & Key Management
+
+### API Key Hygiene
+The QRL integrates with IBM Quantum and various LLM providers. **NEVER hardcode your API keys** in your scripts.
+
+-   **Environment Variables:** Always use `os.getenv("IBM_QUANTUM_TOKEN")`.
+-   **Hardware Connector:** The `QuantumHardwareConnector` automatically looks for this environment variable if no token is provided in the constructor.
+
+### Mitigation of Prompt Injection
+When using `show_metadata=True`, the system injects metadata and system rules into the LLM's prompt. 
+-   **Strong Delimiters:** QRL uses clear delimiters (`--- [QUANTUM METADATA] ---`) to isolate system instructions from user-retrieved context.
+-   **Rule Priority:** The `augment_prompt_with_confidence` function is designed to place system instructions clearly after metadata and before the user query to maintain priority in the LLM's attention span.
 
 ---
 
