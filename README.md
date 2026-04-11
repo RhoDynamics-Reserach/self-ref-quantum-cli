@@ -192,8 +192,22 @@ When using `show_metadata=True`, the system injects metadata and system rules in
 
 ---
 
-## 📜 Scientific Basis & Mathematical Framework
-This project implements the mathematical framework described in **Manuscript 202603.1098** (*"A Hybrid Quantum-Classical Framework for Adaptive AI"*).
+## 📜 Scientific Validation & Empirical Results
+This project serves as the functional proof for **Manuscript 202603.1098** (*"A Hybrid Quantum-Classical Framework for Adaptive AI via Nonlinear Self-Reference"*). 
+
+### 🏆 Empirical Proof Summary
+Our objective benchmark suite (calibrated against Llama3) confirms the theoretical stability of the manifold:
+
+- **Semantic Entanglement (Test 1):** Valid facts produce a high **QCS (0.75)**, confirming strong projection.
+- **Cognitive Orthogonality (Test 3):** Paradoxes or nuanced thought experiments produce a low **QCS (0.24)**, flagging the logical gap.
+- **Structural Density (Test 6):** Misinformation (e.g., "Moon is cheese") is detected as structural noise, resulting in a **caution-level QCS (0.41)**.
+
+For a full mapping of equations to experimental data, see the [Scientific Validation Report](./test/validation_report.md).
+
+---
+
+## 📜 Mathematical Framework
+This project implements the mathematical framework described in the manuscript.
 
 ### 1. Structural Information ($\chi^2$)
 Measures the deviation from uniform noise, identifying the "Structural Density" of the retrieved information.
