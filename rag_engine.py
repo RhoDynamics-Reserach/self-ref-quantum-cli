@@ -13,12 +13,13 @@ class QuantumRAGLayer:
     """
     
     @staticmethod
-    def process_with_context(agent: BaseQuantumAgent, task_vector: np.ndarray, context_vector: np.ndarray = None):
+    def process_with_context(agent: BaseQuantumAgent, task_vector: np.ndarray, context_vector: np.ndarray = None, learning_rate: float = 0.05):
         """
         1. Encodes the task input into a quantum probability distribution.
         2. Blends the agent's internal knowledge state with the injected context state.
         3. Projects the task onto the 'Bended' knowledge manifold.
         4. Returns a Quantum Confidence Score (QCS).
+        5. Triggers evolutionary adaptation for the agent.
         """
         
         # A. Task State Projection
@@ -60,15 +61,18 @@ class QuantumRAGLayer:
         final_confidence = 1.0 / (1.0 + np.exp(-5.0 * (raw_confidence - 0.5)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
-        # E. Update Agent Logic Path
+        # E. Update Agent Metrics & Trigger Evolution
         agent.evaluate_state(task_prob_dist)
+        agent.evolve(learning_rate=learning_rate)
         
         return {
             "confidence_score": final_confidence,
             "projection_score": projection_score,
             "agent_state": {
                 "zeta": agent.zeta,
-                "fitness": agent.fitness
+                "fitness": agent.fitness,
+                "theta": agent.theta,
+                "gamma": agent.gamma
             }
         }
 

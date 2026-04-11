@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from .math_engine import calculate_zeta, calculate_fitness, calculate_chi_square, CHI_SQUARE_REF, ZETA_REF
+from .math_engine import calculate_zeta, calculate_fitness, calculate_chi_square, CHI_SQUARE_REF, ZETA_REF, evolve_parameters
 from .memory import MemoryBuffer, update_stability_dynamically
 
 class BaseQuantumAgent:
@@ -23,7 +23,6 @@ class BaseQuantumAgent:
         self.memory_size = 100 
         
         # 2. Semantic State (Base Knowledge)
-        # 16-dimensional quantum state (2^4 qubits)
         if knowledge_vector is not None:
             self.knowledge_vector = knowledge_vector
         else:
@@ -32,6 +31,7 @@ class BaseQuantumAgent:
             
         # 3. Dynamic Modules
         self.memory = MemoryBuffer(self.tau_m)
+        self.history = [] # Track (chi, zeta, fitness) per interaction
         
         # 4. Success Metrics (Initialized from objective references)
         self.chi_square = CHI_SQUARE_REF 
@@ -46,13 +46,10 @@ class BaseQuantumAgent:
         shots = 1024 # Standard benchmark
         
         if self.executor and hasattr(self.executor, 'run_measurement'):
-            # Use high-level hardware connector interface
             outcomes = self.executor.run_measurement(current_state_probs, shots)
         elif callable(self.executor):
-            # Fallback for custom callables
             outcomes = self.executor(current_state_probs, shots)
         else:
-            # Standard local multinomial simulation
             outcomes = np.random.multinomial(shots, current_state_probs)
             
         self.chi_square = calculate_chi_square(outcomes, shots)
@@ -63,7 +60,31 @@ class BaseQuantumAgent:
         mem_effect = self.memory.get_memory_effect(current_state_probs)
         self.zeta = update_stability_dynamically(zeta_base, mem_effect)
         
-        # C. Total Fitness (Overall Performance)
+        # C. Total Fitness
         self.fitness = calculate_fitness(self.chi_square, self.zeta, self.memory_size)
         
+        # Record history
+        self.history.append({
+            "chi": self.chi_square,
+            "zeta": self.zeta,
+            "fitness": self.fitness
+        })
+        
         return self.fitness
+
+    def evolve(self, learning_rate: float = 0.05):
+        """
+        Triggers parametric evolution based on the latest interaction results.
+        Enables non-linear reinforcement of stable knowledge paths.
+        """
+        if not self.history: return
+        
+        current_fit = self.fitness
+        self.theta, self.gamma = evolve_parameters(
+            self.theta, 
+            self.gamma, 
+            current_fit, 
+            learning_rate
+        )
+        
+        return self.theta, self.gamma

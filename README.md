@@ -156,24 +156,26 @@ pip install -e .
     ```
     *This generates `quantum_rag_layer/config.json`.*
 
-2.  **Run Objective Benchmark:**
+2.  **Run Objective Benchmark & Drift Tests:**
     ```bash
     python test/scientific_benchmark.py
+    python test/drift_test.py
     ```
 
 3.  **Inspect Results:**
-    Check `test/results/objective_results.json` for raw telemetry and `test/results/objective_validation.png` for the visual QCS manifold.
+    Check `test/results/drift_results.json` to see how your agent's $\zeta$ (Stability) evolves over sequential interactions.
 
 ---
 
 ## 🔄 System Pipeline: Step-by-Step
-The QRL follows a rigorous 5-step cognitive pipeline to ensure grounded responses:
+The QRL follows a rigorous 6-step cognitive pipeline to ensure grounded responses:
 
 1.  **Ingestion:** Retrieved context and user query are converted into high-dimensional embeddings.
 2.  **Quantum Bending (DEI):** The Agent's internal knowledge state is mathematically "bent" toward the injected context in a Hilbert Space manifold.
 3.  **Measurement & Analysis:** Discrete sampling (via Simulator or QPU) calculates the $\chi^2$ (Structural Information) and $\zeta$ (Cognitive Stability) metrics.
-4.  **QCS Calculation:** The final **Quantum Confidence Score** is derived by comparing real-time metrics against the objectively calibrated reference baseline.
-5.  **Augmented Generation:** A behavioral system rule is injected into the prompt based on the QCS, steering the LLM's level of authority and skepticism.
+4.  **QCS Calculation:** The final **Quantum Confidence Score** is derived by comparing real-time metrics against the baselines.
+5.  **Augmented Generation:** A behavioral system rule is injected into the prompt based on the QCS, steering the LLM.
+6.  **Evolutionary Feedback:** The agent's internal parameters ($\theta, \gamma$) are updated using a **Learning Rate**. This reinforces stable semantic paths and allows the agent to "mature" over time.
 
 ---
 

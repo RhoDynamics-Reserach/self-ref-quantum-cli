@@ -58,4 +58,35 @@ def calculate_fitness(chi_square: float, zeta: float, memory_size: int) -> float
     f = 0.4 * (chi_square / CHI_SQUARE_REF) + \
         0.3 * (zeta / ZETA_REF) + \
         0.3 * (memory_size / M_REF)
-    return f
+    return min(f, 1.0) # Cap at 1.0 for normalized scaling
+
+def calculate_self_ref_signal(state_vector: np.ndarray) -> float:
+    """
+    Measures the Self-Reference signal (Phi).
+    Determined by the coherence of the state relative to the pointer basis.
+    """
+    if state_vector is None or len(state_vector) == 0:
+        return 0.0
+    # Signal is the ratio of L2 norm of off-diagonal elements (approx)
+    # Simply using the standard deviation of expectations for PoC
+    return float(np.std(np.abs(state_vector)))
+
+def evolve_parameters(current_theta: float, current_gamma: float, fitness: float, learning_rate: float):
+    """
+    Calculates the evolutionary shift for agent parameters.
+    Simulates the 'Offline Evolution' described in the paper.
+    """
+    # Fitness > 0.7 triggers positive reinforcement
+    # Fitness < 0.3 triggers negative mutation
+    
+    delta_theta = (fitness - 0.5) * learning_rate * 2.0
+    delta_gamma = (fitness - 0.5) * learning_rate * 0.5
+    
+    new_theta = current_theta + delta_theta
+    new_gamma = current_gamma + delta_gamma
+    
+    # Bound-check to keep parameters within physical/stable ranges
+    new_theta = max(-math.pi, min(math.pi, new_theta))
+    new_gamma = max(0.1, min(10.0, new_gamma))
+    
+    return new_theta, new_gamma
