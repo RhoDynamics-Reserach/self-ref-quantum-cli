@@ -1,14 +1,18 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="quantum-rg-layer",
+    name="quantum-rag-layer",
     version="1.0.0",
     description="Quantum-inspired Retrieval-Augmented Generation (RAG) Middleware for Chatbots",
     author="Quantum Synergy Team",
     packages=["quantum_rag_layer"],
     package_dir={"quantum_rag_layer": "."},
     install_requires=[
-        "numpy"
+        "numpy",
+        "requests",
+        "qiskit>=1.0.0",
+        "qiskit-aer",
+        "qiskit-ibm-runtime"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

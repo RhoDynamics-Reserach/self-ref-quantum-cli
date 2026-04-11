@@ -1,12 +1,14 @@
 from .agent_model import BaseQuantumAgent
 from .rag_engine import QuantumRAGLayer
 from .middleware import QuantumMiddleware
+from .hardware_connector import QuantumHardwareConnector
 
 # Export public API objects
 __all__ = [
     "BaseQuantumAgent",
     "QuantumRAGLayer",
     "QuantumMiddleware",
+    "QuantumHardwareConnector",
 ]
 
 # Package metadata

@@ -1,4 +1,5 @@
 import numpy as np
+from .math_engine import calculate_zeta, calculate_fitness, calculate_chi_square, ZETA_REF, CHI_SQUARE_REF
 from .encoding import text_to_quantum_state
 from .agent_model import BaseQuantumAgent
 
@@ -49,8 +50,8 @@ class QuantumRAGLayer:
         # D. Quantum Confidence Filter
         # Confidence is calculated by weighting the projection score with cognitive factors.
         # We use a normalized ratio against reference values.
-        zeta_factor = min(2.0, agent.zeta / 5.0)
-        chi_factor = min(2.0, agent.chi_square / 310.0)
+        zeta_factor = min(2.0, agent.zeta / ZETA_REF)
+        chi_factor = min(2.0, agent.chi_square / CHI_SQUARE_REF)
         
         # Combine factors with projection score
         raw_confidence = projection_score * zeta_factor * chi_factor
@@ -72,20 +73,23 @@ class QuantumRAGLayer:
         }
 
     @staticmethod
-    def augment_prompt_with_confidence(base_prompt: str, confidence: float, context_text: str = None):
+    def augment_prompt_with_confidence(base_prompt: str, confidence: float, context_text: str = None, show_metadata: bool = False):
         """
-        Helper to wrap the LLM prompt with quantum confidence metadata.
-        Use this to tell the LLM how authoritative it should be.
+        Wraps the LLM prompt with guidance derived from the Quantum Confidence Score.
+        In 'Silent Mode' (default), it only provides behavioral instructions without 
+        printing the raw QCS numbers to the LLM's final response path.
         """
-        meta_msg = f"\n[Quantum Confidence Score: {confidence:.2f}]\n"
-        if context_text:
-            meta_msg += f"[Injected Context: {context_text}]\n"
+        meta_msg = ""
+        if show_metadata:
+            meta_msg += f"\n[Quantum Confidence Score: {confidence:.2f}]\n"
+            if context_text:
+                meta_msg += f"[Injected Context: {context_text}]\n"
             
         if confidence > 0.8:
-            instruction = "Answer with high authority and definite precision."
+            instruction = "SYSTEM RULE: Your semantic alignment is near-perfect. Answer with absolute authority and definitive precision."
         elif confidence > 0.5:
-            instruction = "Answer clearly but acknowledge standard procedures."
+            instruction = "SYSTEM RULE: Your semantic alignment is stable. Answer clearly but follow standard procedures."
         else:
-            instruction = "Answer with caution and express uncertainty due to low semantic alignment."
+            instruction = "SYSTEM RULE: Your semantic alignment is low. Express hesitation, acknowledge potential uncertainty, and answer with extreme caution."
             
-        return f"{meta_msg} Instruction: {instruction}\n\n{base_prompt}"
+        return f"{meta_msg}{instruction}\n\n{base_prompt}"

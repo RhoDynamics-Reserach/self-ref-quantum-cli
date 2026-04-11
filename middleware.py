@@ -19,25 +19,27 @@ class QuantumMiddleware:
             raise ValueError("embedding_function must be a callable that returns an embedding vector.")
         self.embed_fn = embedding_function
 
-    def create_agent(self, name: str, base_knowledge_text: Optional[str] = None) -> BaseQuantumAgent:
+    def create_agent(self, name: str, base_knowledge_text: Optional[str] = None, measurement_executor=None) -> BaseQuantumAgent:
         """
         Initializes a Quantum Agent. 
         If base_knowledge_text is provided, it encodes it as the agent's fundamental semantic state.
+        Now allows injecting a Real Hardware Executor.
         """
         knowledge_vec = None
         if base_knowledge_text:
             raw_vec = self._safe_embed(base_knowledge_text)
             knowledge_vec = text_to_quantum_state(raw_vec)
             
-        return BaseQuantumAgent(name=name, knowledge_vector=knowledge_vec)
+        return BaseQuantumAgent(name=name, knowledge_vector=knowledge_vec, measurement_executor=measurement_executor)
 
-    def process_query(self, agent: BaseQuantumAgent, query: str, context: str) -> Tuple[str, dict]:
+    def process_query(self, agent: BaseQuantumAgent, query: str, context: str, show_metadata: bool = False) -> Tuple[str, dict]:
         """
         Takes a user's query and the retrieved context text (from your vector DB),
         processes them through the Quantum RAG pipeline, and returns the modified prompt.
         
-        Returns:
-            Tuple[augmented_prompt (str), result_metrics (dict)]
+        Args:
+            show_metadata: If True, prints the QCS score directly into the LLM prompt.
+                           Default is False (Silent Mode) for production use.
         """
         # 1. Embeddings
         query_vec = self._safe_embed(query)
@@ -56,7 +58,7 @@ class QuantumMiddleware:
         augmented_prompt = QuantumRAGLayer.augment_prompt_with_confidence(
             base_prompt=base_prompt,
             confidence=qcs,
-            context_text="Dynamically Injected Context"
+            show_metadata=show_metadata
         )
         
         return augmented_prompt, q_result
