@@ -5,8 +5,12 @@ from quantum_rag_layer.agent_model import BaseQuantumAgent
 
 def mock_semantic_embed(text):
     """
-    Deterministic scenario-aware embedding synced with 4-qubit (16 state) sampling.
-    Simulates 'Orthogonal Paradoxes' by assigning different semantic directions.
+    [CI STRUCTURAL TEST PROTOCOL]
+    This provides deterministic scenario-aware embeddings to test the 
+    underlying projection math without requiring a live HuggingFace/Ollama LLM.
+    
+    * For the true Academic Empirical Benchmark with real LLM manifolds,
+    * execute `python tests/run_academic_benchmark.py`.
     """
     vec = np.zeros(768)
     

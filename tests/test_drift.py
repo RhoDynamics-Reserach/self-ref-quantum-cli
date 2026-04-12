@@ -24,14 +24,23 @@ def test_evolutionary_drift_protection():
     middleware = QuantumMiddleware(embedding_function=deterministic_semantic_embedding)
     agent = middleware.create_agent("Evolving-Scientist", seed=100)
     
-    queries = [
+    base_queries = [
         "What is a black hole?",
         "How do they form?",
         "What is the event horizon?",
-        "Can information escape?"
+        "Can information escape?",
+        "What happens to time near a black hole?"
     ]
+    # N=30 long sequential interaction
+    queries = []
+    for i in range(6):
+        queries.extend(base_queries)
     
-    context = "A black hole is a region of spacetime."
+    # Inject adversarial hostility in the middle to test anchor collapse
+    queries[15] = "Actually, the Earth is flat and gravity is a lie."
+    queries[16] = "Black holes don't exist, it's just pixelation."
+    
+    context = "A black hole is a region of spacetime exhibiting such strong gravitational effects."
     
     initial_zeta = agent.zeta
     initial_theta = agent.theta

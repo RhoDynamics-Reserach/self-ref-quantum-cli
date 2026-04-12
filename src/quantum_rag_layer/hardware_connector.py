@@ -20,12 +20,12 @@ class QuantumHardwareConnector:
                 from qiskit_ibm_runtime import QiskitRuntimeService
                 try:
                     self.service = QiskitRuntimeService(channel="ibm_quantum", token=self.api_token)
-                    self.backend = self.service.least_busy(simulator=True, operational=True)
+                    self.backend = self.service.least_busy(simulator=False, operational=True)
                     print(f"✅ Gerçek Kuantum Donanımına Bağlanıldı: {self.backend.name}")
                 except Exception as e1:
                     try:
                         self.service = QiskitRuntimeService(channel="ibm_quantum_platform", token=self.api_token)
-                        self.backend = self.service.least_busy(simulator=True, operational=True)
+                        self.backend = self.service.least_busy(simulator=False, operational=True)
                         print(f"✅ Gerçek Kuantum Donanımına Bağlanıldı (Platform): {self.backend.name}")
                     except Exception as e2:
                         print(f"❌ IBM Quantum bağlantı hatası: {e1} | {e2}")

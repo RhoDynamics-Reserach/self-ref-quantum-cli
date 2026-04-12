@@ -35,6 +35,7 @@ class QuantumRAGLayer:
             # Blending Factor (0.4) - The 'Strength' of the RAG injection
             # Higher = More context influence | Lower = More agent personality influence
             knowledge = (0.6 * knowledge) + (0.4 * context_state)
+            agent._last_context_state = context_state
             
             # Re-normalize the blended semantic state
             norm_k = np.linalg.norm(knowledge)
@@ -48,14 +49,26 @@ class QuantumRAGLayer:
         
         projection_score = dot_product / (norm_task * norm_agent + 1e-9)
         
+        # Calculate isolated context-to-task tension (Classical-Quantum Orthogonality)
+        context_tension = projection_score
+        if getattr(agent, "_last_context_state", None) is not None:
+            # We must evaluate if the INJECTED context is irrelevant, not just the whole agent
+            c_norm = np.linalg.norm(agent._last_context_state)
+            if c_norm > 0:
+                context_tension = np.dot(agent._last_context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
+        
         # D. Quantum Confidence Filter
-        # Confidence is calculated by weighting the projection score with cognitive factors.
-        # We use a normalized ratio against reference values.
         zeta_factor = min(2.0, agent.zeta / ZETA_REF)
         chi_factor = min(2.0, agent.chi_square / CHI_SQUARE_REF)
         
-        # Combine factors with projection score
         raw_confidence = projection_score * zeta_factor * chi_factor
+        
+        # --- Destructive Interference (Orthogonality Penalty) ---
+        # If the INJECTED context fundamentally disagrees with the task
+        if context_tension < 0.70:
+            # Steep exponential decay penalty
+            ortho_penalty = np.exp(-20.0 * (0.70 - context_tension))
+            raw_confidence *= ortho_penalty
         
         # Smooth with sigmoid-like behavior for the final score
         final_confidence = 1.0 / (1.0 + np.exp(-5.0 * (raw_confidence - 0.5)))
