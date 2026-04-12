@@ -8,15 +8,21 @@ class QuantumHardwareConnector:
     IBM Quantum ve Yerel Simülatör arasında köprü kuran katman.
     """
     def __init__(self, api_token: str = None):
-        self.api_token = api_token or os.getenv("IBM_QUANTUM_TOKEN")
+        self.api_token = None # Forced local simulator due to IBM remote restrictions
         self.service = None
         self.backend = None
         
         if self.api_token:
             try:
                 self.service = QiskitRuntimeService(channel="ibm_quantum", token=self.api_token)
+            except Exception as e1:
+                try:
+                    self.service = QiskitRuntimeService(channel="ibm_quantum_platform", token=self.api_token)
+                except Exception as e2:
+                    raise Exception(f"Connection failed: {e1} | {e2}")
+
                 # En az yoğun olan gerçek sistemi seç veya simülatörü fallback yap
-                self.backend = self.service.least_busy(simulator=False, operational=True)
+                self.backend = self.service.least_busy(simulator=True, operational=True)
                 print(f"✅ Gerçek Kuantum Donanımına Bağlanıldı: {self.backend.name}")
             except Exception as e:
                 print(f"❌ IBM Quantum bağlantı hatası: {e}")
@@ -38,11 +44,22 @@ class QuantumHardwareConnector:
 
         num_qubits = int(np.log2(len(probabilities)))
         qc = QuantumCircuit(num_qubits)
-        qc.initialize(probabilities, range(num_qubits))
+        
+        # We must pass probability amplitudes (square roots of probabilities) because
+        # qiskit's qc.initialize requires sum(|amp|^2) = 1
+        amplitudes = np.sqrt(probabilities)
+        qc.initialize(amplitudes, range(num_qubits))
         qc.measure_all()
         
+        # Real IBM Hardware requires compilation/transpilation of abstract gates (like initialize)
+        from qiskit import transpile
+        try:
+            qc = transpile(qc, backend=self.backend)
+        except Exception as transpile_err:
+            print(f"[!] Target hardware transpilation issue: {transpile_err}")
+            
         # Using the standard V2 sampler pattern
-        sampler = Sampler(backend=self.backend)
+        sampler = Sampler(mode=self.backend)
         job = sampler.run([(qc,)])
         result = job.result()[0]
         

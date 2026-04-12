@@ -23,14 +23,16 @@ wheels/
 
 # QRL Local Calibration
 config.json
+.env
 
 # Test Artifacts/Results
-test/results/*
-!test/results/.gitkeep
-test/*.png
-test/*.csv
-test/scientific_results.json
-test/objective_results.json
+tests/results/*
+!tests/results/.gitkeep
+tests/*.png
+tests/*.csv
+tests/scientific_results.json
+tests/objective_results.json
+*.zip
 
 # IDE
 .vscode/

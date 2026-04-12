@@ -7,8 +7,8 @@ import pandas as pd
 def generate_academic_plot():
     # 1. Setup Data Paths
     base_dir = os.path.dirname(__file__)
-    data_file = os.path.join(base_dir, "results", "drift_results.json")
-    output_img = os.path.join(base_dir, "results", "drift_evolution_plot.png")
+    data_file = os.path.join(base_dir, "results", "qpu_final_benchmark.json")
+    output_img = os.path.join(base_dir, "results", "final_evolution_plot.png")
 
     if not os.path.exists(data_file):
         print(f"Error: Data file not found at {data_file}")

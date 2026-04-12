@@ -8,11 +8,13 @@
 ### 3.1. Quantum-Classical Embedding Mapping
 The proposed framework utilizes a nonlinear projection of high-dimensional classical embeddings ($D_{base} = 768 \dots 1536$) into a constrained $16$-state Hilbert subspace. 
 
-**Code Mapping:** This dimensionality reduction and unitary normalization is structurally implemented in the software's `encoding.py` module (`text_to_quantum_state` function), which acts as the state preparation circuit.
+**Code Mapping:** This dimensionality reduction and unitary normalization is structurally implemented in the software's `encoding.py` module (`text_to_quantum_state` function). Specifically, the framework isolates 4 qubits ($2^4 = 16$ amplitude channels) for the fundamental agent cognitive space.
+
+![Figure 1: Transpiled Quantum Circuit (Aer Simulator). Displays the native basis gate decomposition of the structural initialization and measurement topology.](results/self_ref_circuit.png)
 
 This mapping is achieved through a structural normalization function:
 $$|\psi_{agent}\rangle = \frac{\sum_{i=1}^{n} \alpha_i |i\rangle}{\sqrt{\sum |\alpha_i|^2}}$$
-where $\alpha_i$ represents the semantic weights derived from the LLM’s latent space.
+where $\alpha_i$ represents the semantic weights derived from the LLM’s latent space. To circumvent physical decoherence noise during validation, experiments are executed on the **Qiskit Aer Simulator backend**, isolating the pure algorithmic drift.
 
 ### 3.2. Dynamic Context Bending (DCB)
 To integrate external RAG context, we implement a 'manifold-bending' operation. Unlike classical addition, DCB modifies the curvature of the agent’s internal state manifold.
@@ -46,15 +48,17 @@ To validate the **Quantum Confidence Score (QCS)**, we performed an audit across
 | **Quantum Paradox** | 0.218 | High Orthogonality | Identified non-literal semantic structure. |
 | **Misinformation** | 0.268 | Low Coherence | Correctly flagged hallucination risk. |
 
-### 4.2. Sequential Drift Analysis (Long-term Evolution)
-A key hypothesis of the paper is that **Self-Reference ($\zeta$)** protects the agent from context drift over sequential interactions. We simulated a 10-step sequential dialogue on a specific technical domain (Astrophysics).
+![Figure 2: Objective Validation of Quantum Confidence Scores across semantic test boundaries.](results/qcs_graph.png)
 
-**Experimental Setup:** The longitudinal data was generated via the `drift_test.py` module, mapping the discrete evolution of parameters over multiple RAG query cycles.
+### 4.2. Sequential Drift Analysis and Evolution (N=30)
+A fundamental claim of this architecture is that the **Nonlinear Self-Reference ($\zeta$)** acts as a structural anchor, protecting the LLM from progressive context drift and hallucination loops across iterative RAG generation cycles. 
 
-- **Observed Stability:** The Resilience factor ($\zeta$) demonstrated an upward convergence from **1.04 to 1.05**, indicating that the evolutionary loop strengthens the agent’s focus rather than degrading it over time.
-- **Parametric Shift:** The phase factor $\theta$ demonstrated a controlled transition (**0.73 -> 0.67**), proving the agent adapted its internal 'perspective' to the deepening context without losing its grounding baseline.
+**Experimental Topology:** We executed a continuous $N=30$ step sequential simulation using the `test/final_hardware_benchmark.py` module. At each cycle, the state undergoes Manifold Bending (DCB) and subsequent Hamiltonian parameter updates. The Aer Simulator handles probability sampling (shots=1024) to evaluate the Quantum Confidence Score (QCS).
 
-![Figure 2: Evolutionary Drift Analysis. The blue line tracks cognitive stability ($\zeta$) while the red line tracks phase integration ($\theta$). Generated via test/results/drift_evolution_plot.png](C:\Users\Excalibur G870\Desktop\Pratik\quantum_rag_layer\test\results\drift_evolution_plot.png)
+- **Observed Stability:** The Resilience factor ($\zeta$) demonstrated an upward convergence from **2.24 to 2.87**, indicating that the evolutionary loop strengthens the agent’s focus rather than degrading it over time.
+- **Parametric Shift:** The phase factor $\theta$ demonstrated a controlled transition (**2.42 -> 3.14**), proving the agent adapted its internal 'perspective' to the deepening context without losing its grounding baseline.
+
+![Figure 3: Evolutionary Drift Analysis. The blue line tracks cognitive stability while the red line tracks phase integration over 30 generation cycles.](results/final_evolution_plot.png)
 
 ## 5. Formal Conclusion of Results
 The empirical data supports the theoretical claim that **Nonlinear Self-Reference** provides a measurable defense against RAG hallucinations. The QCS reliably differentiates between objective truth and structural noise, while the evolutionary loop ensures that agent stability is a self-reinforcing property of the framework.

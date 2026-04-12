@@ -2,7 +2,7 @@
 ### *Professional Hybrid Quantum-Classical Middleware for LLM Cognitive Grounding*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Scientific Status](https://img.shields.io/badge/Status-Validated_PoC-green.svg)]()
+[![Scientific Status](https://img.shields.io/badge/Status-Research_Prototype-blue.svg)]()
 [![Hardware](https://img.shields.io/badge/Backend-IBM_QPU_/_Aer-blueviolet.svg)]()
 
 ---
@@ -25,8 +25,8 @@ Instead of simple text injection, QRL:
 
 ## 🏆 Key Unique Features
 
-### 1. ⚖️ Objectivity via Self-Calibration
-Unlike other systems with arbitrary similarity thresholds, QRL includes a **`calibration.py`** module. It analyzes your specific model's (e.g., Llama3) embedding distribution to derive objective reference constants. **Your results are 100% objective to your specific AI setup.**
+### 1. ⚖️ Empirical Grounding via Self-Calibration
+Unlike other systems with arbitrary similarity thresholds, QRL includes a **`calibration`** script. It analyzes your specific model's (e.g., Llama3) embedding distribution to derive mathematical reference constants. **Your results are empirically grounded to your specific AI setup.**
 
 ### 2. 🔄 Self-Reference Loop ($Öz-Ref$)
 Uses a **Non-linear Memory Kernel** to track the agent's cognitive "Maturity." As the agent processes related queries, its stability ($\zeta$) evolves, allowing it to maintain context-authority over long conversation cycles.

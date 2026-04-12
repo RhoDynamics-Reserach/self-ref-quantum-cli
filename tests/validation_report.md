@@ -18,6 +18,11 @@ This report formally correlates the theoretical metrics defined in the research 
 | **Dynamic Embedding Injection (DEI)** | `QuantumRAGLayer.process_with_context` | Blends base knowledge $|\psi_{base}\rangle$ with context $|\psi_{ctx}\rangle$. |
 | **Performance Fitness ($F$)** | `BaseQuantumAgent.fitness` | Weighted aggregate of $\chi^2$, $\zeta$, and memory depth. |
 
+### 2.1 The Quantum Topology
+The structural initialization and internal manifold of the agent is processed via a 4-qubit Hilbert space. The native basis gate decomposition of this theoretical circuit is shown below:
+
+![Figure 1: Transpiled Quantum Circuit (Aer Simulator). Validates the translation of continuous Lindblad mathematics into executing logic gates. Operated via Qiskit Aer Simulator to isolate algorithmic stability from ambient decoherence.](./results/self_ref_circuit.png)
+
 ---
 
 ## 3. Empirical Results Analysis
@@ -30,11 +35,13 @@ The QCS acts as a probability density of "Semantic Entanglement." Our tests show
 2.  **The Nuance Trap (Paradox):** Test 3 (Schrödinger's Cat) yielded a **QCS of 0.24**. This is a critical validation. The context was a "thought experiment" while the query was about "reality." The system detected the **orthogonality** of these information states, signaling a low confidence.
 3.  **Context Misinformation:** Test 6 (Moon is cheese) yielded a **QCS of 0.41**. While semantically aligned in terms of keywords, the structural variance (Chi-Square) detected a drop in density compared to the Llama3 baseline, generating a caution signal.
 
-### B. Cognitive Evolution & Drift Analysis
-The manuscript describes an **Evolutionary Mechanism** where agent parameters ($\theta, \gamma$) adapt after each interaction via a **Learning Rate**. 
+### B. Cognitive Evolution & Drift Analysis (N=30)
+The manuscript describes an **Evolutionary Mechanism** where agent parameters ($\theta, \gamma$) adapt after each interaction via a **Learning Rate**. To test this, we deployed the `final_hardware_benchmark.py` testing module to execute 30 sequential context interactions.
 
-- **Sequential Stability Test:** Over 10 related queries, the agent's $\zeta$ (Resilience) remained stable (**1.66 -> 1.70**), while its focus factor ($\theta$) evolved from **1.11 -> 1.16**.
+- **Sequential Stability Test:** Over 30 related sequential queries, the agent's $\zeta$ (Resilience) converged structurally upwards (**2.24 -> 2.87**), while its focus phase ($\theta$) successfully evolved and locked-in from **2.42 -> 3.14**.
 - **Self-Reference Advantage:** Unlike classical RAG, which typically "drifts" or hallucinates as the conversation context deepens, the QRL agent uses its nonlinear feedback loop to "lock-in" on the ground truth.
+
+![Figure 2: Empirical Measurement of Evolution vs Self-Reference. The blue line ($\zeta$) tracks cognitive stability while the red line ($\theta$) tracks evolutionary phase adaptation over 30 test cycles.](./results/final_evolution_plot.png)
 
 ---
 

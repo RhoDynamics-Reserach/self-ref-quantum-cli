@@ -5,8 +5,8 @@ setup(
     version="1.0.0",
     description="Quantum-inspired Retrieval-Augmented Generation (RAG) Middleware for Chatbots",
     author="Quantum Synergy Team",
-    packages=["quantum_rag_layer"],
-    package_dir={"quantum_rag_layer": "."},
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     install_requires=[
         "numpy",
         "requests",
