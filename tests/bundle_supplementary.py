@@ -45,6 +45,7 @@ def bundle_supplementary_materials():
         os.path.join('tests', 'test_scientific_benchmark.py'),
         os.path.join('tests', 'generate_academic_plots.py'),
         os.path.join('tests', 'generate_circuit_diagram.py'),
+        os.path.join('tests', 'run_academic_benchmark.py'),
         
         # Scientific Results & Formal Reports
         os.path.join('tests', 'academic_methods_results.md'),
@@ -53,6 +54,7 @@ def bundle_supplementary_materials():
         os.path.join('tests', 'results', 'final_evolution_plot.png'),
         os.path.join('tests', 'results', 'self_ref_circuit.png'),
         os.path.join('tests', 'results', 'qcs_graph.png'),
+        os.path.join('tests', 'results', 'formal_benchmark_statistics.md'),
     ]
 
     print(f"[*] Packaging {len(files_to_zip)} artifacts into Reviewer-Proof Supplementary Bundle...")
