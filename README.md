@@ -152,8 +152,8 @@ To ensure the scientific integrity and reproducibility of the findings, follow t
 
 ### 2. Environment Setup
 ```bash
-git clone https://github.com/Alperen915/Self-Referance-Quantum-Rag.git
-cd Self-Referance-Quantum-Rag
+git clone https://github.com/Alperen915/Self-Reference-Quantum-Rag.git
+cd Self-Reference-Quantum-Rag
 pip install -r requirements.txt
 pip install -e .
 ```
@@ -164,14 +164,14 @@ pip install -e .
 
 1.  **Model Calibration:**
     ```bash
-    python tests/calibration.py
+    python tests/test_calibration.py
     ```
-    *This generates `quantum_rag_layer/config.json`.*
+    *This generates `src/quantum_rag_layer/config.json`.*
 
 2.  **Run Objective Benchmark & Drift Tests:**
     ```bash
-    python tests/scientific_benchmark.py
-    python tests/drift_test.py
+    python tests/test_scientific_benchmark.py
+    python tests/test_drift.py
     ```
 
 3.  **Inspect Results:**
