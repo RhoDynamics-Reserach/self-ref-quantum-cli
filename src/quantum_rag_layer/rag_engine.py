@@ -65,9 +65,9 @@ class QuantumRAGLayer:
         
         # --- Destructive Interference (Orthogonality Penalty) ---
         # If the INJECTED context fundamentally disagrees with the task
-        if context_tension < 0.70:
+        if context_tension < 0.55:
             # Steep exponential decay penalty
-            ortho_penalty = np.exp(-20.0 * (0.70 - context_tension))
+            ortho_penalty = np.exp(-20.0 * (0.55 - context_tension))
             raw_confidence *= ortho_penalty
         
         # Smooth with sigmoid-like behavior for the final score

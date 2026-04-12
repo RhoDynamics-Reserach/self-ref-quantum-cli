@@ -15,12 +15,12 @@ def get_real_embedding(text):
         response = requests.post(OLLAMA_URL, json={"model": OLLAMA_MODEL, "prompt": text}, timeout=10.0)
         if response.status_code == 200:
             return np.array(response.json()["embedding"])
-    except Exception:
-        pass
-    # Deterministic fallback ONLY for pytest CI limits 
-    # (academic_benchmark handles the strict real-world enforcement)
-    np.random.seed(abs(hash(text)) % (2**32))
-    return np.random.uniform(0.1, 1.0, 768)
+        else:
+            raise ConnectionError(f"Ollama returned status {response.status_code}")
+    except Exception as e:
+        print(f"\n[FATAL] 💥 Empirical Calibration requires Ollama ('{OLLAMA_MODEL}').")
+        print(f"Error: {e}")
+        raise ConnectionError("Ollama API unreachable. Refusing to generate fake/mock calibration data.")
 
 def measure_environment_baselines():
     """Calculates true references by sampling diverse context lengths."""

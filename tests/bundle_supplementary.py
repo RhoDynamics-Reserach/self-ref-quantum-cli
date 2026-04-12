@@ -46,11 +46,13 @@ def bundle_supplementary_materials():
         os.path.join('tests', 'generate_academic_plots.py'),
         os.path.join('tests', 'generate_circuit_diagram.py'),
         os.path.join('tests', 'run_academic_benchmark.py'),
+        os.path.join('tests', 'final_hardware_benchmark.py'),
         
         # Scientific Results & Formal Reports
         os.path.join('tests', 'academic_methods_results.md'),
         os.path.join('tests', 'validation_report.md'),
         os.path.join('tests', 'results', 'qpu_final_benchmark.json'),
+        os.path.join('tests', 'results', 'qpu_final_proof.json'),
         os.path.join('tests', 'results', 'final_evolution_plot.png'),
         os.path.join('tests', 'results', 'self_ref_circuit.png'),
         os.path.join('tests', 'results', 'qcs_graph.png'),

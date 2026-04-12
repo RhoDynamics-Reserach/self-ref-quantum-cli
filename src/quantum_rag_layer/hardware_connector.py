@@ -21,17 +21,17 @@ class QuantumHardwareConnector:
                 try:
                     self.service = QiskitRuntimeService(channel="ibm_quantum", token=self.api_token)
                     self.backend = self.service.least_busy(simulator=False, operational=True)
-                    print(f"✅ Gerçek Kuantum Donanımına Bağlanıldı: {self.backend.name}")
+                    print(f"[SUCCESS] Gerçek Kuantum Donanımına Bağlanıldı: {self.backend.name}")
                 except Exception as e1:
                     try:
                         self.service = QiskitRuntimeService(channel="ibm_quantum_platform", token=self.api_token)
                         self.backend = self.service.least_busy(simulator=False, operational=True)
-                        print(f"✅ Gerçek Kuantum Donanımına Bağlanıldı (Platform): {self.backend.name}")
+                        print(f"[SUCCESS] Gerçek Kuantum Donanımına Bağlanıldı (Platform): {self.backend.name}")
                     except Exception as e2:
-                        print(f"❌ IBM Quantum bağlantı hatası: {e1} | {e2}")
+                        print(f"[ERROR] IBM Quantum bağlantı hatası: {e1} | {e2}")
                         self._init_simulator()
             except ImportError:
-                print("⚠️  'qiskit-ibm-runtime' yüklü değil, donanım modulleri devre dışı.")
+                print("[WARNING] 'qiskit-ibm-runtime' yüklü değil, donanım modulleri devre dışı.")
                 self._init_simulator()
         else:
             self._init_simulator()
@@ -41,9 +41,9 @@ class QuantumHardwareConnector:
         try:
             from qiskit_aer import AerSimulator
             self.backend = AerSimulator()
-            print("🚀 Yerel Kuantum Simülatörü (Aer) Başlatıldı.")
+            print("[INFO] Yerel Kuantum Simülatörü (Aer) Başlatıldı.")
         except ImportError:
-            print("⚠️  'qiskit-aer' yüklü değil. Kuantum simülasyonu yapılamaz.")
+            print("[WARNING] 'qiskit-aer' yüklü değil. Kuantum simülasyonu yapılamaz.")
             self.backend = None
 
     def run_measurement(self, probabilities: np.ndarray, shots: int = 1024):

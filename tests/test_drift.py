@@ -1,27 +1,31 @@
 import pytest
 import numpy as np
+import requests
 
 from quantum_rag_layer.middleware import QuantumMiddleware
 
-def deterministic_semantic_embedding(text):
-    """
-    768-dimensional deterministic vector to simulate LLM output structure.
-    Used for testing evolutionary trajectories.
-    """
-    vec = np.zeros(768)
-    # Map text length to a signal to simulate different 'thoughts'
-    signal_idx = (len(text) * 13) % 700 
-    vec[signal_idx] = 10.0
-    vec += 0.1 # Background bias
-    norm = np.linalg.norm(vec)
-    return vec / norm
+OLLAMA_URL = "http://localhost:11434/api/embeddings"
+OLLAMA_MODEL = "llama3"
+_DRIFT_CACHE = {}
+
+def real_semantic_embedding(text):
+    if text in _DRIFT_CACHE:
+        return _DRIFT_CACHE[text]
+    try:
+        response = requests.post(OLLAMA_URL, json={"model": OLLAMA_MODEL, "prompt": text}, timeout=10.0)
+        vec = np.array(response.json()["embedding"])
+        _DRIFT_CACHE[text] = vec
+        return vec
+    except Exception as e:
+        print(f"[ERROR] Drift test requires real Ollama connection: {e}")
+        raise ConnectionError("Ollama unreachable for drift test.")
 
 def test_evolutionary_drift_protection():
     """
     Asserts that the framework actively prevents RAG drift across iterations.
-    This replaces the old print-only script with a robust CI validation.
+    Uses real LLM embeddings for authentic manifold noise.
     """
-    middleware = QuantumMiddleware(embedding_function=deterministic_semantic_embedding)
+    middleware = QuantumMiddleware(embedding_function=real_semantic_embedding)
     agent = middleware.create_agent("Evolving-Scientist", seed=100)
     
     base_queries = [

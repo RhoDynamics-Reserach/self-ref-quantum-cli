@@ -33,14 +33,20 @@ def text_to_quantum_state(embedding: np.ndarray, num_qubits: int = 4):
     emp_std = np.std(embedding) + 1e-9
     norm_emb = (embedding - emp_mean) / emp_std
     
-    # Simple semantic pooling: Take N evenly spaced samples to represent the manifold
-    # instead of averaging which can wash out signals in high-dim vectors.
-    indices = np.linspace(0, len(embedding) - 1, target_dim, dtype=int)
-    reduced_vec = norm_emb[indices]
+    # Chunk-wise pooling to preserve semantic manifold topology
+    # Split the long embedding into target_dim (16) sectors
+    chunk_size = len(embedding) // target_dim
+    reduced_vec = []
     
-    # Ensure all values are positive for amplitude encoding to avoid sign cancellations
-    # if we were to treat them as probability amplitudes directly.
-    # Actually, amplitude encoding uses absolute values, but let's shift to be safe.
-    reduced_vec = np.abs(reduced_vec)
+    for i in range(target_dim):
+        start = i * chunk_size
+        end = (i + 1) * chunk_size if i < target_dim - 1 else len(embedding)
+        chunk = norm_emb[start:end]
+        # Using a non-linear activation (exp) to ensure positivity 
+        # while emphasizing high-magnitude semantic signals
+        reduced_vec.append(np.mean(np.exp(chunk)))
     
-    return amplitude_encoding(reduced_vec)
+    reduced_vec = np.array(reduced_vec)
+    
+    # Re-normalize into a valid probability distribution (|psi|^2)
+    return reduced_vec / (np.sum(reduced_vec) + 1e-9)
