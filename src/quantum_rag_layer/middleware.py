@@ -19,18 +19,18 @@ class QuantumMiddleware:
             raise ValueError("embedding_function must be a callable that returns an embedding vector.")
         self.embed_fn = embedding_function
 
-    def create_agent(self, name: str, base_knowledge_text: Optional[str] = None, measurement_executor=None) -> BaseQuantumAgent:
+    def create_agent(self, name: str, base_knowledge_text: Optional[str] = None, measurement_executor=None, seed: int = None) -> BaseQuantumAgent:
         """
         Initializes a Quantum Agent. 
         If base_knowledge_text is provided, it encodes it as the agent's fundamental semantic state.
-        Now allows injecting a Real Hardware Executor.
+        Now allows injecting a Real Hardware Executor and a deterministic Seed.
         """
         knowledge_vec = None
         if base_knowledge_text:
             raw_vec = self._safe_embed(base_knowledge_text)
             knowledge_vec = text_to_quantum_state(raw_vec)
             
-        return BaseQuantumAgent(name=name, knowledge_vector=knowledge_vec, measurement_executor=measurement_executor)
+        return BaseQuantumAgent(name=name, knowledge_vector=knowledge_vec, measurement_executor=measurement_executor, seed=seed)
 
     def process_query(self, agent: BaseQuantumAgent, query: str, context: str, show_metadata: bool = False) -> Tuple[str, dict]:
         """

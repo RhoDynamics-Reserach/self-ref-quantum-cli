@@ -5,18 +5,16 @@ from quantum_rag_layer.middleware import QuantumMiddleware
 
 def deterministic_semantic_embedding(text):
     """
-    Deterministic numerical vector generation to eliminate 'mock' complaints.
-    Returns a strongly biased vector to simulate high 'Quantum Confidence' 
-    intended for testing the reinforcement evolution paths.
+    768-dimensional deterministic vector to simulate LLM output structure.
+    Used for testing evolutionary trajectories.
     """
-    length = len(text)
-    # Strongly biased towards first few qubits to simulate a 'clear' signal
-    vec = np.zeros(16)
-    vec[0] = 10.0
-    vec[1] = 5.0
-    vec += np.sin(np.linspace(1, length, 16))
+    vec = np.zeros(768)
+    # Map text length to a signal to simulate different 'thoughts'
+    signal_idx = (len(text) * 13) % 700 
+    vec[signal_idx] = 10.0
+    vec += 0.1 # Background bias
     norm = np.linalg.norm(vec)
-    return vec / norm if norm > 0 else np.ones(16)/np.sqrt(16)
+    return vec / norm
 
 def test_evolutionary_drift_protection():
     """
@@ -24,7 +22,7 @@ def test_evolutionary_drift_protection():
     This replaces the old print-only script with a robust CI validation.
     """
     middleware = QuantumMiddleware(embedding_function=deterministic_semantic_embedding)
-    agent = middleware.create_agent("Evolving-Scientist")
+    agent = middleware.create_agent("Evolving-Scientist", seed=100)
     
     queries = [
         "What is a black hole?",

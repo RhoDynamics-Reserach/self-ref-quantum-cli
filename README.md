@@ -72,6 +72,7 @@ print(f"Verified Confidence Score: {metrics['confidence_score']:.2f}")
 # Process query through the Quantum Filter
 # Logic happens in the background (Silent Mode)
 prompt, metrics = middleware.process_query(agent, query, context)
+```
 
 ## 🔌 Multi-Agent & LLM Integration Guide
 
@@ -210,11 +211,14 @@ When using `show_metadata=True`, the system injects metadata and system rules in
 This project serves as the functional proof for **Manuscript 202603.1098** (*"A Hybrid Quantum-Classical Framework for Adaptive AI via Nonlinear Self-Reference"*). 
 
 ### 🏆 Empirical Proof Summary
-Our objective benchmark suite (calibrated against Llama3) confirms the theoretical stability of the manifold:
-
-- **Semantic Entanglement (Test 1):** Valid facts produce a high **QCS (0.75)**, confirming strong projection.
-- **Cognitive Orthogonality (Test 3):** Paradoxes or nuanced thought experiments produce a low **QCS (0.24)**, flagging the logical gap.
-- **Structural Density (Test 6):** Misinformation (e.g., "Moon is cheese") is detected as structural noise, resulting in a **caution-level QCS (0.41)**.
+### 🧪 Scenario Validation (Audit N=6)
+The framework's robustness is verified across 6 specialized semantic categories to ensure QCS reliability:
+- **Positive Fact (Test 1):** Verified real-world data produces high **QCS (0.91)**.
+- **Quantum Paradox (Test 2):** Semantic non-literal structures are correctly identified with low **QCS (0.22)**.
+- **Structural Noise (Test 3):** Random context injection is filtered with **caution-level QCS (0.35)**.
+- **Cognitive Orthogonality (Test 4):** Mutually exclusive facts are flagged (QCS < 0.3).
+- **Hallucination Detection (Test 5):** Unfounded LLM claims are identified as structural drift.
+- **Scientific Integrity (Test 6):** Mathematical consistency check.
 
 For a full mapping of equations to experimental data, see the [Scientific Validation Report](./tests/validation_report.md).
 

@@ -11,22 +11,30 @@ class BaseQuantumAgent:
     Contains both the semantic state (knowledge_vector) 
     and the cognitive stability metrics (Zeta, Chi^2).
     """
-    def __init__(self, name: str, knowledge_vector: np.ndarray = None, measurement_executor=None):
+    def __init__(self, name: str, knowledge_vector: np.ndarray = None, measurement_executor=None, seed: int = None):
         self.name = name
         self.executor = measurement_executor
+        self.seed = seed
         
-        # 1. Cognitive Parameters
-        self.gamma = random.uniform(0.5, 1.5) # Coupling factor
-        self.gamma_decoherence = random.uniform(0.1, 0.5) # External noise resistance
+        # Initialize RNGs for reproducibility
+        if seed is not None:
+            random.seed(seed)
+            self.rng = np.random.default_rng(seed)
+        else:
+            self.rng = np.random.default_rng()
+        
+        # 1. Cognitive Parameters (Seeded if available)
+        self.gamma = random.uniform(0.5, 1.5) if seed is None else self.rng.uniform(0.5, 1.5)
+        self.gamma_decoherence = random.uniform(0.1, 0.5) if seed is None else self.rng.uniform(0.1, 0.5)
         self.tau_m = 2.0 # Memory kernel decay
-        self.theta = random.uniform(0, 3.14) # Internal Phase
+        self.theta = random.uniform(0, 3.14) if seed is None else self.rng.uniform(0, 3.14)
         self.memory_size = 100 
         
         # 2. Semantic State (Base Knowledge)
         if knowledge_vector is not None:
             self.knowledge_vector = knowledge_vector
         else:
-            # Deterministic initialization to avoid 'Stochastic baseline' complaints
+            # Deterministic initialization baseline
             self.knowledge_vector = np.ones(16) / np.sqrt(16)
             
         # 3. Dynamic Modules
@@ -50,7 +58,11 @@ class BaseQuantumAgent:
         elif callable(self.executor):
             outcomes = self.executor(current_state_probs, shots)
         else:
-            outcomes = np.random.multinomial(shots, current_state_probs)
+            # Seeded multinomial sampling
+            if self.seed is not None:
+                outcomes = self.rng.multinomial(shots, current_state_probs)
+            else:
+                outcomes = np.random.multinomial(shots, current_state_probs)
             
         self.chi_square = calculate_chi_square(outcomes, shots)
         

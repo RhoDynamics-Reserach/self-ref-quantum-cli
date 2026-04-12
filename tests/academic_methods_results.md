@@ -40,7 +40,7 @@ This allows the agent to "lock-in" on successful semantic grounding paths ($F > 
 ### 4.1. Accuracy Audit (Static Integrity)
 To validate the **Quantum Confidence Score (QCS)**, we performed an audit across six distinct semantic scenarios (N=1024 shots per measurement).
 
-**Experimental Setup:** The measurements were collected using the `scientific_benchmark.py` testing suite, which routes the bended quantum states into the `qpu_experiment_runner.py` (interfacing with Qiskit Aer) to retrieve classical bitstring statistics.
+**Experimental Setup:** The measurements were collected using the `tests/test_scientific_benchmark.py` testing suite, which routes the bended quantum states into the Qiskit Aer simulator (via `hardware_connector.py`) to retrieve classical bitstring statistics.
 
 | Scenario Type | Mean QCS | Metric Result | Interpretation |
 | :--- | :--- | :--- | :--- |
@@ -53,7 +53,7 @@ To validate the **Quantum Confidence Score (QCS)**, we performed an audit across
 ### 4.2. Sequential Drift Analysis and Evolution (N=30)
 A fundamental claim of this architecture is that the **Nonlinear Self-Reference ($\zeta$)** acts as a structural anchor, protecting the LLM from progressive context drift and hallucination loops across iterative RAG generation cycles. 
 
-**Experimental Topology:** We executed a continuous $N=30$ step sequential simulation using the `test/final_hardware_benchmark.py` module. At each cycle, the state undergoes Manifold Bending (DCB) and subsequent Hamiltonian parameter updates. The Aer Simulator handles probability sampling (shots=1024) to evaluate the Quantum Confidence Score (QCS).
+**Experimental Topology:** We executed a continuous $N=30$ step sequential simulation using the `tests/final_hardware_benchmark.py` module. At each cycle, the state undergoes Manifold Bending (DCB) and subsequent Hamiltonian parameter updates. The Aer Simulator handles probability sampling (shots=1024) to evaluate the Quantum Confidence Score (QCS).
 
 - **Observed Stability:** The Resilience factor ($\zeta$) demonstrated an upward convergence from **2.24 to 2.87**, indicating that the evolutionary loop strengthens the agent’s focus rather than degrading it over time.
 - **Parametric Shift:** The phase factor $\theta$ demonstrated a controlled transition (**2.42 -> 3.14**), proving the agent adapted its internal 'perspective' to the deepening context without losing its grounding baseline.
