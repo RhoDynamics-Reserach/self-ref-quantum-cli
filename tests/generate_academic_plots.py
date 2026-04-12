@@ -39,8 +39,8 @@ def generate_academic_plot():
     # Primary Axis (Zeta - Stability)
     color1 = '#003366' # Deep Navy
     ax1.set_xlabel('Interaction Step (Sequential Dialogue)', weight='bold')
-    ax1.set_ylabel('Cognitive Stability ($\zeta$)', color=color1, weight='bold')
-    line1 = ax1.plot(df['step'], df['zeta'], marker='o', color=color1, label='Resilience ($\zeta$)', markersize=8)
+    ax1.set_ylabel(r'Cognitive Stability ($\zeta$)', color=color1, weight='bold')
+    line1 = ax1.plot(df['step'], df['zeta'], marker='o', color=color1, label=r'Resilience ($\zeta$)', markersize=8)
     ax1.tick_params(axis='y', labelcolor=color1)
     
     # Optional: Add a shaded region for the 'baseline'
@@ -49,8 +49,8 @@ def generate_academic_plot():
     # Secondary Axis (Theta - Phase Evolution)
     ax2 = ax1.twinx()  
     color2 = '#CC0000' # Deep Red
-    ax2.set_ylabel('Agent Phase Angle ($\theta$)', color=color2, weight='bold')
-    line2 = ax2.plot(df['step'], df['theta'], marker='s', color=color2, linestyle=':', label='Perspective ($\theta$)', markersize=8)
+    ax2.set_ylabel(r'Agent Phase Angle ($\theta$)', color=color2, weight='bold')
+    line2 = ax2.plot(df['step'], df['theta'], marker='s', color=color2, linestyle=':', label=r'Perspective ($\theta$)', markersize=8)
     ax2.tick_params(axis='y', labelcolor=color2)
 
     # 5. Title and Layout

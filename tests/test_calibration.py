@@ -43,6 +43,11 @@ def test_calibration_generates_config():
         assert "ZETA_REF" in loaded
     print(f"[+] Artifact generated successfully: {target_path}")
 
+if __name__ == "__main__":
+    # Allow running as a script to generate artifacts as promised in README
+    test_calibration_generates_config()
+    test_calibration_baseline_generation()
+
 def test_calibration_baseline_generation():
     """
     Validates that the initialization math produces physically valid

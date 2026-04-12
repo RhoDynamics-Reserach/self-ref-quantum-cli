@@ -41,10 +41,10 @@ class BaseQuantumAgent:
         self.memory = MemoryBuffer(self.tau_m)
         self.history = [] # Track (chi, zeta, fitness) per interaction
         
-        # 4. Success Metrics (Initialized from objective references)
+        # 4. Success Metrics (Calculated from initial state)
         self.chi_square = CHI_SQUARE_REF 
-        self.zeta = ZETA_REF 
-        self.fitness = 0.5 
+        self.zeta = calculate_zeta(self.gamma, self.gamma_decoherence, self.tau_m)
+        self.fitness = calculate_fitness(self.chi_square, self.zeta, self.memory_size)
         
     def evaluate_state(self, current_state_probs: np.ndarray):
         """

@@ -80,8 +80,14 @@ The QRL is designed as an **Abstract Middleware**. Use the following patterns to
 
 ### 1. OpenAI Integration (GPT-4o)
 ```python
-import openai
-from quantum_rag_layer import QuantumMiddleware
+import os
+import sys
+
+# Ensure the 'src' directory is in PYTHONPATH for local execution
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), "src"))
+
+import numpy as np
+from quantum_rag_layer.middleware import QuantumMiddleware
 
 # 1. Define the embedding bridge
 def embed_openai(text):
@@ -176,7 +182,8 @@ pip install -e .
     ```
 
 3.  **Inspect Results:**
-    Check `tests/results/drift_results.json` to see how your agent's $\zeta$ (Stability) evolves over sequential interactions.
+    *Output: `tests/results/drift_results.json`*
+    to see how your agent's $\zeta$ (Stability) evolves over sequential interactions.
 
 ---
 
