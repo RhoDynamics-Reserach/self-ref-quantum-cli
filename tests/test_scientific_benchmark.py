@@ -34,6 +34,12 @@ def test_objective_confidence_score_distinction():
     assert "confidence_score" in metrics_match
     assert "confidence_score" in metrics_paradox
     assert isinstance(metrics_match["confidence_score"], float)
+    
+    # CRITICAL ACADEMIC ASSERTION: 
+    # QCS must mathematically differentiate between Grounded Reality (Matched) 
+    # and Semantic Paradox.
+    msg = f"QCS Failure: Matched ({metrics_match['confidence_score']:.2f}) is not higher than Paradox ({metrics_paradox['confidence_score']:.2f})"
+    assert metrics_match["confidence_score"] > metrics_paradox["confidence_score"], msg
 
 def test_no_random_fallbacks_in_agent():
     """
