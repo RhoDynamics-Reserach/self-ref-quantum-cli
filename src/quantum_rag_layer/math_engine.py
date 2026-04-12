@@ -8,8 +8,8 @@ import json
 # Defaults are based on the initial 202603.1098 research data.
 # BUT: These will be overwritten by 'calibration.py' for model-specific accuracy.
 
-CHI_SQUARE_REF = 310.0
-ZETA_REF = 5.0
+CHI_SQUARE_REF = 100.0
+ZETA_REF = 2.0
 M_REF = 1000.0
 
 # Dynamic Calibration Loader

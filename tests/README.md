@@ -5,13 +5,15 @@ This directory contains the tools required to objectively validate the **Quantum
 ## 📂 Laboratory Structure
 
 ### Core Tools
-*   **`calibration.py`**: ❗ **RUN THIS FIRST.** It analyzes your model's embedding distribution (e.g., Llama3) and generates a `config.json` with objective reference constants. This prevents "Data Shifting" bias.
-*   **`scientific_benchmark.py`**: The primary "Honesty Test". Compares Classic RAG vs. Quantum RAG across 6 diverse scenarios, including hallucination traps and semantic collisions.
-*   **`qpu_experiment_runner.py`**: Connects to **IBM Quantum** for real-world QPU execution.
+*   **`tests/test_calibration.py`**: ❗ **RUN THIS FIRST.** It analyzes your model's embedding distribution (e.g., Llama3) and generates a `config.json` with objective reference constants. 
+*   **`tests/test_scientific_benchmark.py`**: The primary "Honesty Test". Compares Classic RAG vs. Quantum RAG across 6 diverse scenarios.
+*   **`tests/test_drift.py`**: Validates evolutionary stability over sequential interactions.
+*   **`tests/test_integration.py`**: Full end-to-end chatbot simulation and smoke test.
 
-### Results & Proofs (`results/`)
-*   `objective_results.json`: Raw telemetry data from the latest audit.
-*   `objective_validation.png`: Visual proof of how QCS distinguishes between semantic entanglement and random noise.
+### Results & Proofs (`tests/results/`)
+*   `qpu_final_benchmark.json`: Raw telemetry data from the latest audit.
+*   `final_evolution_plot.png`: Visual proof of how stability ($\zeta$) adapts to context.
+*   `qcs_graph.png`: Differentiates between validity and paradox noise.
 
 ---
 
@@ -21,14 +23,14 @@ To ensure your RAG system is scientifically valid and not just "guessing":
 
 1.  **Calibrate your Model:**
     ```bash
-    python test/calibration.py
+    python tests/test_calibration.py
     ```
 2.  **Run the Objective Audit:**
     ```bash
-    python test/scientific_benchmark.py
+    python tests/test_scientific_benchmark.py
     ```
 3.  **Inspect the Manifold:**
-    Check `results/objective_validation.png`. Look for high QCS in "Positive" cases and attenuated QCS in "Out of Context" cases.
+    Check `tests/results/qcs_graph.png`. Look for high QCS in "Positive" cases and attenuated QCS in "Out of Context" cases.
 
 ---
 

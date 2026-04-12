@@ -49,3 +49,26 @@ def test_evolutionary_drift_protection():
     # 2. Evolutionary Phase Adaptation Check
     # The agent must have physically adapted its phase due to continuous Lindblad updates
     assert final_theta != initial_theta, "Evolution failed: Agent phase remained completely stagnant."
+    print(f"[+] Drift protection verified. Zeta: {initial_zeta:.2f} -> {final_zeta:.2f}")
+
+if __name__ == "__main__":
+    import os
+    import json
+    
+    # Run the test
+    test_evolutionary_drift_protection()
+    
+    # Save a sample artifact for documentation consistency
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    results_dir = os.path.join(base_dir, "tests", "results")
+    os.makedirs(results_dir, exist_ok=True)
+    
+    sample_data = {
+        "status": "success",
+        "drift_protection": "active",
+        "timestamp": str(np.datetime64('now'))
+    }
+    
+    with open(os.path.join(results_dir, "drift_results.json"), "w") as f:
+        json.dump(sample_data, f, indent=4)
+    print(f"[+] Generated: tests/results/drift_results.json")

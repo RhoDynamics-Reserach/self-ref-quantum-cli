@@ -8,9 +8,7 @@
 ### 3.1. Quantum-Classical Embedding Mapping
 The proposed framework utilizes a nonlinear projection of high-dimensional classical embeddings ($D_{base} = 768 \dots 1536$) into a constrained $16$-state Hilbert subspace. 
 
-**Code Mapping:** This dimensionality reduction and unitary normalization is structurally implemented in the software's `encoding.py` module (`text_to_quantum_state` function). Specifically, the framework isolates 4 qubits ($2^4 = 16$ amplitude channels) for the fundamental agent cognitive space.
-
-![Figure 1: Transpiled Quantum Circuit (Aer Simulator). Displays the native basis gate decomposition of the structural initialization and measurement topology.](results/self_ref_circuit.png)
+**Code Mapping:** This dimensionality reduction and unitary normalization is structurally implemented in the software's `encoding.py` module (`text_to_quantum_state` function). Specifically, the framework isolates 4 qubits ($2^4 = 16$ amplitude channels) for the fundamental agent cognitive space![Figure 1: Transpiled Quantum Circuit (Aer Simulator). Displays the native basis gate decomposition of the structural initialization and measurement topology.](results/self_ref_circuit.png)
 
 This mapping is achieved through a structural normalization function:
 $$|\psi_{agent}\rangle = \frac{\sum_{i=1}^{n} \alpha_i |i\rangle}{\sqrt{\sum |\alpha_i|^2}}$$
@@ -53,12 +51,13 @@ To validate the **Quantum Confidence Score (QCS)**, we performed an audit across
 ### 4.2. Sequential Drift Analysis and Evolution (N=30)
 A fundamental claim of this architecture is that the **Nonlinear Self-Reference ($\zeta$)** acts as a structural anchor, protecting the LLM from progressive context drift and hallucination loops across iterative RAG generation cycles. 
 
-**Experimental Topology:** We executed a continuous $N=30$ step sequential simulation using the `tests/final_hardware_benchmark.py` module. At each cycle, the state undergoes Manifold Bending (DCB) and subsequent Hamiltonian parameter updates. The Aer Simulator handles probability sampling (shots=1024) to evaluate the Quantum Confidence Score (QCS).
+**Experimental Topology:** We executed a continuous $N=30$ step sequential simulation using the `tests/test_scientific_benchmark.py` module. At each cycle, the state undergoes Manifold Bending (DCB) and subsequent Hamiltonian parameter updates. The Aer Simulator handles probability sampling (shots=1024) to evaluate the Quantum Confidence Score (QCS).
 
 - **Observed Stability:** The Resilience factor ($\zeta$) demonstrated an upward convergence from **2.24 to 2.87**, indicating that the evolutionary loop strengthens the agent’s focus rather than degrading it over time.
 - **Parametric Shift:** The phase factor $\theta$ demonstrated a controlled transition (**2.42 -> 3.14**), proving the agent adapted its internal 'perspective' to the deepening context without losing its grounding baseline.
 
 ![Figure 3: Evolutionary Drift Analysis. The blue line tracks cognitive stability while the red line tracks phase integration over 30 generation cycles.](results/final_evolution_plot.png)
+lot.png)
 
 ## 5. Formal Conclusion of Results
 The empirical data supports the theoretical claim that **Nonlinear Self-Reference** provides a measurable defense against RAG hallucinations. The QCS reliably differentiates between objective truth and structural noise, while the evolutionary loop ensures that agent stability is a self-reinforcing property of the framework.

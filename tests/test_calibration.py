@@ -43,11 +43,6 @@ def test_calibration_generates_config():
         assert "ZETA_REF" in loaded
     print(f"[+] Artifact generated successfully: {target_path}")
 
-if __name__ == "__main__":
-    # Allow running as a script to generate artifacts as promised in README
-    test_calibration_generates_config()
-    test_calibration_baseline_generation()
-
 def test_calibration_baseline_generation():
     """
     Validates that the initialization math produces physically valid
@@ -72,3 +67,9 @@ def test_calibration_baseline_generation():
     assert chi_ref > 0.0
     # Actual calculation: (1.0 / 0.3) * (1 - exp(-0.6)) approx 1.5039
     assert abs(zeta_ref - 1.5039) < 0.001
+    print(f"[+] Baseline math verified. Zeta-Ref: {zeta_ref:.4f}")
+
+if __name__ == "__main__":
+    # Allow running as a script to generate artifacts as promised in README
+    test_calibration_generates_config()
+    test_calibration_baseline_generation()

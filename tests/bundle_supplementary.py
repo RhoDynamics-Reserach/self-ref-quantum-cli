@@ -1,10 +1,26 @@
 import os
 import zipfile
+import shutil
+from datetime import datetime
+
+def clean_artifacts(root_dir):
+    """Recursively removes all __pycache__ and build artifacts."""
+    print(f"[*] Starting deep cleanup of {root_dir}...")
+    for root, dirs, files in os.walk(root_dir):
+        for d in list(dirs):
+            if d in ["__pycache__", ".pytest_cache"]:
+                path = os.path.join(root, d)
+                shutil.rmtree(path)
+                print(f"    [-] Deleted: {path}")
 
 def bundle_supplementary_materials():
     # We are in ROOT/tests/bundle_supplementary.py
     # base_dir should be ROOT/
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Pre-Cleanup
+    clean_artifacts(base_dir)
+    
     output_filename = os.path.join(base_dir, 'RhoDynamics_Supplementary_Materials.zip')
     
     # Updated paths to reflect the Reviewer-Proofed structure
