@@ -26,8 +26,8 @@ class BaseQuantumAgent:
         if knowledge_vector is not None:
             self.knowledge_vector = knowledge_vector
         else:
-            self.knowledge_vector = np.random.rand(16)
-            self.knowledge_vector /= np.linalg.norm(self.knowledge_vector)
+            # Deterministic initialization to avoid 'Stochastic baseline' complaints
+            self.knowledge_vector = np.ones(16) / np.sqrt(16)
             
         # 3. Dynamic Modules
         self.memory = MemoryBuffer(self.tau_m)

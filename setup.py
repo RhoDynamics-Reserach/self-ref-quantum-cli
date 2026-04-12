@@ -12,7 +12,8 @@ setup(
         "requests",
         "qiskit>=1.0.0",
         "qiskit-aer",
-        "qiskit-ibm-runtime"
+        "qiskit-ibm-runtime",
+        "python-dotenv"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

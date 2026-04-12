@@ -2,13 +2,17 @@ import os
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 from qiskit_aer import AerSimulator
 import numpy as np
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class QuantumHardwareConnector:
     """
     IBM Quantum ve Yerel Simülatör arasında köprü kuran katman.
     """
     def __init__(self, api_token: str = None):
-        self.api_token = None # Forced local simulator due to IBM remote restrictions
+        # Prefer provided token, fallback to environment variable
+        self.api_token = api_token or os.getenv("IBM_QUANTUM_TOKEN")
         self.service = None
         self.backend = None
         

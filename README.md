@@ -40,19 +40,31 @@ While simulation is the default, QRL can connect to **IBM Quantum QPU** hardware
 
 ### 1. Installation
 ```bash
-pip install ./quantum_rag_layer
+# Clone the repository
+git clone https://github.com/Alperen915/Self-Reference-Quantum-Rag.git
+cd Self-Reference-Quantum-Rag
+
+# Install in editable mode
+pip install -e .
 ```
 
 ### 2. Basic Setup
 ```python
-from quantum_rag_layer import QuantumMiddleware, QuantumHardwareConnector
+from quantum_rag_layer import QuantumMiddleware
 
-# 1. Initialize Middleware (Plug in any embedding function)
-middleware = QuantumMiddleware(embedding_function=my_model.embed)
+# 1. Initialize Middleware (Plug in your embedding function)
+# Example deterministic bypass for testing:
+middleware = QuantumMiddleware(embedding_function=lambda x: [0.1]*768)
 
-# 2. OPTIONAL: Calibrate first (See 'test/calibration.py')
-# 3. Create a Quantum Agent
-agent = middleware.create_agent("Agent-01", "You are an expert in Physics.")
+# 2. Create a Quantum Agent
+agent = middleware.create_agent("Agent-01")
+
+# 3. Secure your RAG prompt
+context = "Quantum computers use qubits to represent data."
+query = "How do quantum computers work?"
+prompt, metrics = middleware.process_query(agent, query, context)
+
+print(f"Verified Confidence Score: {metrics['confidence_score']:.2f}")
 ```
 
 ### 3. The "Silent" RAG Loop
@@ -152,18 +164,18 @@ pip install -e .
 
 1.  **Model Calibration:**
     ```bash
-    python test/calibration.py
+    python tests/calibration.py
     ```
     *This generates `quantum_rag_layer/config.json`.*
 
 2.  **Run Objective Benchmark & Drift Tests:**
     ```bash
-    python test/scientific_benchmark.py
-    python test/drift_test.py
+    python tests/scientific_benchmark.py
+    python tests/drift_test.py
     ```
 
 3.  **Inspect Results:**
-    Check `test/results/drift_results.json` to see how your agent's $\zeta$ (Stability) evolves over sequential interactions.
+    Check `tests/results/drift_results.json` to see how your agent's $\zeta$ (Stability) evolves over sequential interactions.
 
 ---
 
@@ -204,7 +216,7 @@ Our objective benchmark suite (calibrated against Llama3) confirms the theoretic
 - **Cognitive Orthogonality (Test 3):** Paradoxes or nuanced thought experiments produce a low **QCS (0.24)**, flagging the logical gap.
 - **Structural Density (Test 6):** Misinformation (e.g., "Moon is cheese") is detected as structural noise, resulting in a **caution-level QCS (0.41)**.
 
-For a full mapping of equations to experimental data, see the [Scientific Validation Report](./test/validation_report.md).
+For a full mapping of equations to experimental data, see the [Scientific Validation Report](./tests/validation_report.md).
 
 ---
 
