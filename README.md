@@ -171,23 +171,23 @@ pip install -e .
 
 ### 3. Step-by-Step Validation Workflow
 > [!IMPORTANT]
-> **ALWAYS Calibrate First.** Every LLM has a different "semantic noise floor." Calibration ensures the QCS is objective to your local setup.
+> **Recommended Workflow:** Use `pytest` for a robust, service-aware validation. The suite will automatically skip high-dependency tests (Ollama/IBM) if the services are unreachable.
 
-1.  **Model Calibration:**
+1.  **Unified Test Suite (Professional Audit):**
+    ```bash
+    pytest tests/
+    ```
+    *This will run artifacts, integration, and structural tests. If Ollama is running, it will include high-fidelity empirical benchmarks.*
+
+2.  **Model Calibration (Strict Baseline):**
     ```bash
     python tests/test_calibration.py
     ```
-    *This generates `src/quantum_rag_layer/config.json`.*
-
-2.  **Run Objective Benchmark & Drift Tests:**
-    ```bash
-    python tests/test_scientific_benchmark.py
-    python tests/test_drift.py
-    ```
+    *This generates `src/quantum_rag_layer/config.json`. Requires Ollama.*
 
 3.  **Inspect Results:**
-    *Output: `tests/results/drift_results.json`*
-    to see how your agent's $\zeta$ (Stability) evolves over sequential interactions.
+    *Output: `tests/results/formal_benchmark_statistics.md`*
+    to see the authoritative statistical breakdown of the library's performance.
 
 ---
 
