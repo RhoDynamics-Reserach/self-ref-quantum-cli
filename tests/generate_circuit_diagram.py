@@ -13,8 +13,10 @@ def generate_actual_execution_circuit():
     """
     print("[*] Replicating Real Execution Circuit Topology...")
     
-    # 1. Temsili bir probabilites (veri) seti kullan (Kodu testlerdeki gibi)
-    probabilities = np.random.rand(16)
+    # 1. Use a deterministic representative state (Ground Truth pattern)
+    # This prevents random-noise diagrams and ensures academic replicability
+    rng = np.random.default_rng(42)
+    probabilities = rng.uniform(0.01, 1.0, 16)
     probabilities /= np.sum(probabilities) # Normalize to 1
     amplitudes = np.sqrt(probabilities) # qiskit initialize format
     

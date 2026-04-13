@@ -1,56 +1,64 @@
-import os
 import json
-import pytest
 import numpy as np
-from quantum_rag_layer.math_engine import calculate_zeta, calculate_chi_square
-from quantum_rag_layer.encoding import text_to_quantum_state
+import pytest
+from quantum_rag_layer import QuantumMiddleware
 
-def test_calibration_artifact_generation():
+def test_calibration_artifact_generation(tmp_path, mock_embedding):
     """
-    Simulates a calibration run and verifies that config.json is generated 
-    with the correct schema.
+    Verifies that calibration logic produces a valid config.json using
+    actual math engine outputs, stored in a temporary directory.
     """
-    # 1. Define target path
-    pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    config_path = os.path.join(pkg_dir, "src", "quantum_rag_layer", "config.json")
+    config_path = tmp_path / "config.json"
     
-    # 2. Cleanup old artifact if exists
-    if os.path.exists(config_path):
-        os.remove(config_path)
+    # Run real logic to get empirical values
+    from quantum_rag_layer.math_engine import calculate_zeta, calculate_chi_square
+    from quantum_rag_layer.encoding import text_to_quantum_state
     
-    # 3. Simulate calibration logic
-    dummy_config = {
-        "CHI_SQUARE_REF": 150.0,
-        "ZETA_REF": 1.5,
+    vec = mock_embedding("test text")
+    state_probs = text_to_quantum_state(vec)
+    chi = float(calculate_chi_square(state_probs * 1024, 1024))
+    zeta = float(calculate_zeta(1.0, 0.3, 2.0))
+    
+    config_data = {
+        "CHI_SQUARE_REF": chi,
+        "ZETA_REF": zeta,
         "M_REF": 1000.0,
-        "calibrated_model": "pytest-mock"
+        "calibration_type": "automated-test"
     }
     
     with open(config_path, "w", encoding="utf-8") as f:
-        json.dump(dummy_config, f, indent=4)
+        json.dump(config_data, f, indent=4)
     
-    # 4. ASSERTION: File must exist and be valid JSON
-    assert os.path.exists(config_path), "Calibration failed to generate config.json"
-    with open(config_path, "r") as f:
-        data = json.load(f)
-        assert data["CHI_SQUARE_REF"] == 150.0
+    assert config_path.exists()
+    assert chi > 0
+    assert zeta >= 0
 
-def test_drift_artifact_generation():
+def test_drift_artifact_generation(tmp_path, mock_embedding):
     """
-    Verifies that drift analysis generates the expected JSON results artifact.
+    Verifies that drift analysis generates valid historical JSON traces
+    based on actual agent evolution cycles.
     """
-    # 1. Define target path
-    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    results_dir = os.path.join(root_dir, "tests", "results")
-    drift_path = os.path.join(results_dir, "drift_results.json")
+    results_dir = tmp_path / "results"
+    results_dir.mkdir()
+    drift_path = results_dir / "drift_results.json"
     
-    os.makedirs(results_dir, exist_ok=True)
+    from quantum_rag_layer import QuantumMiddleware
+    middleware = QuantumMiddleware(embedding_function=mock_embedding)
+    agent = middleware.create_agent("Test-Agent", seed=42)
     
-    # 2. Mock results
-    mock_drift = [{"step": 1, "zeta": 1.5, "qcs": 0.8}]
+    history = []
+    for i in range(3):
+        middleware.process_query(agent, "query", "context")
+        agent.evolve(learning_rate=0.1)
+        history.append({
+            "step": i,
+            "zeta": float(agent.zeta),
+            "fitness": float(agent.fitness)
+        })
     
     with open(drift_path, "w") as f:
-        json.dump(mock_drift, f, indent=4)
+        json.dump(history, f, indent=4)
         
-    # 3. ASSERTION
-    assert os.path.exists(drift_path), "Drift test failed to generate results artifact"
+    assert drift_path.exists()
+    assert len(history) == 3
+    assert history[2]["zeta"] != history[0]["zeta"]

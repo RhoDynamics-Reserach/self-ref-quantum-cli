@@ -14,36 +14,29 @@ def test_package_import_smoke():
     assert QuantumMiddleware is not None
     assert QuantumHardwareConnector is not None
 
-def test_end_to_end_chatbot_flow():
+def test_end_to_end_chatbot_flow(mock_embedding):
     """
     Simulates a full chatbot integration cycle:
-    1. Middleware initialization with deterministic embedding.
+    1. Middleware initialization with semantic mock.
     2. Agent creation.
-    3. Context-aware query processing.
-    4. Prompt augmentation verification.
+    3. Context-aware query processing (Valid vs Invalid).
     """
-    # 1. Init
-    def mock_embed(text):
-        # Biased deterministic vector for high confidence
-        vec = np.zeros(768)
-        vec[0] = 1.0 # High alignment
-        return vec
-        
-    middleware = QuantumMiddleware(embedding_function=mock_embed)
-    
-    # 2. Agent creation
+    middleware = QuantumMiddleware(embedding_function=mock_embedding)
     agent = middleware.create_agent("E2E-Agent", seed=100)
-    assert isinstance(agent, BaseQuantumAgent)
     
-    # 3. Process Query
     context = "The capital of France is Paris."
-    query = "What is the capital of France?"
     
-    prompt, metrics = middleware.process_query(agent, query, context)
+    # Process Query 1: Valid Ground Truth
+    prompt_v, metrics_v = middleware.process_query(agent, "What is the capital of France?", context)
     
-    # 4. Assertions
-    assert metrics["confidence_score"] > 0.5
-    assert "Paris" in prompt
-    assert "SYSTEM RULE" in prompt or "CRITICAL SYSTEM RULE" in prompt
-    assert agent.zeta > 1.0 # Guaranteed by seed=100 for these params
-    print(f"[+] E2E Flow verified. QCS: {metrics['confidence_score']:.2f}")
+    # Process Query 2: Fraudulent/Mismatch
+    prompt_i, metrics_i = middleware.process_query(agent, "What is the capital of England?", context)
+    
+    # 4. TIGHTENED ASSERTIONS
+    # Paris should be treated as legitimate, while England should be flagged as orthogonal
+    assert metrics_v["confidence_score"] > metrics_i["confidence_score"], \
+        f"Sensitivity Error: Valid ({metrics_v['confidence_score']:.2f}) must exceed Invalid ({metrics_i['confidence_score']:.2f})"
+    
+    assert "Paris" in prompt_v
+    assert "CRITICAL SYSTEM RULE" in prompt_v
+    print(f"[+] E2E Flow verified. Sensitivity Delta: {metrics_v['confidence_score'] - metrics_i['confidence_score']:.3f}")

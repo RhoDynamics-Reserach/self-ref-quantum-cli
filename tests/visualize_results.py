@@ -15,8 +15,8 @@ def main():
         results = json.load(f)
         
     iterations = [r["step"] for r in results]
-    # In V4.0, 'fitness' serves as the composite Confidence Score (QCS)
-    confidences = [r["fitness"] for r in results]
+    # Distinguish between instantaneous QCS and cumulative Fitness
+    confidences = [r.get("confidence_score", r.get("fitness")) for r in results]
     zetas = [r["zeta"] for r in results]
     fitnesses = [r["fitness"] for r in results]
     

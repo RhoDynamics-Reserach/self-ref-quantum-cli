@@ -37,11 +37,8 @@ def get_ollama_embedding(text):
         _EMBED_CACHE[text] = vec
         return vec
     except Exception as e:
-        print(f"\n[FATAL ERROR] 💥 Empirical Benchmark requires a real Embedding Model.")
-        print(f"Ollama API '{OLLAMA_URL}' is unreachable or '{OLLAMA_MODEL}' is missing.")
-        print(f"Details: {e}")
-        print("Please run Ollama to perform a mathematically rigorous benchmark.")
-        sys.exit(1) # We refuse to produce fake data!
+        # We raise an exception instead of sys.exit to allow library/test compatibility
+        raise RuntimeError(f"Ollama Unreachable: {e}. Empirical Benchmark requires a live LLM manifold.")
 
 # --- Held-Out Curated Dataset (V2 Expanded) ---
 DATASET = [
