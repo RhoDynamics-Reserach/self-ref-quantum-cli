@@ -26,13 +26,13 @@ config.json
 .env
 
 # Test Artifacts/Results
-tests/results/*
-!tests/results/.gitkeep
-tests/*.png
-tests/*.csv
-tests/scientific_results.json
-tests/objective_results.json
-*.zip
+!tests/results/*.md
+!tests/results/*.json
+!tests/results/*.png
+tests/results/.cache/
+
+# Academic Bundles
+!RhoDynamics_Supplementary_Materials.zip
 
 # IDE
 .vscode/

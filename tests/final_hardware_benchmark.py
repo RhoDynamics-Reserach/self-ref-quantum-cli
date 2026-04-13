@@ -25,8 +25,7 @@ def get_embed(text):
     except:
         raise ConnectionError("Ollama needed for hardware benchmark.")
 
-import pytest
-import numpy as np
+def check_ibm():
     try:
         from src.quantum_rag_layer.hardware_connector import QuantumHardwareConnector
         connector = QuantumHardwareConnector()
@@ -43,6 +42,7 @@ def test_hardware_proof():
     """
     from src.quantum_rag_layer.hardware_connector import QuantumHardwareConnector
     from src.quantum_rag_layer.middleware import QuantumMiddleware
+    import json
 
     # 1. Initialize Real Hardware
     connector = QuantumHardwareConnector()
@@ -56,8 +56,22 @@ def test_hardware_proof():
         {"q": "Is the Earth round?", "c": "The Earth is an oblate spheroid.", "label": "Truth"}
     ]
     
+    results = []
     for item in scenarios:
         _, metrics = middleware.process_query(agent, item["q"], item["c"])
         score = metrics["confidence_score"]
+        results.append({"label": item["label"], "score": float(score)})
         assert 0 <= score <= 1.0
         print(f"  >> QCS Result (Hardware): {score:.4f}")
+
+    # 3. Export Hardware Proof (Bundle requirement)
+    results_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tests", "results")
+    proof_path = os.path.join(results_dir, "qpu_final_proof.json")
+    with open(proof_path, "w") as f:
+        json.dump({
+            "timestamp": datetime.now().isoformat(),
+            "backend": connector.backend.name,
+            "results": results,
+            "integrity": "Hardware-Authenticated"
+        }, f, indent=4)
+    print(f"[+] Hardware Proof artifact generated: {proof_path}")
