@@ -17,20 +17,31 @@ This directory contains the tools required to objectively validate the **Quantum
 
 ---
 
-## 🚀 The "Honesty" Workflow
+## 🚀 The "Honesty" Workflow (V5.1 Optimized)
 
 To ensure your RAG system is scientifically valid and not just "guessing":
+
+#### Holistic Audit (Recommended)
+```bash
+pytest tests/
+```
+*This command uses the new robust infrastructure to discover all tests, handling service checks and skips automatically.*
+
+#### Step-by-Step Methodology
+If you prefer manual execution of individual components:
 
 1.  **Calibrate your Model:**
     ```bash
     python tests/test_calibration.py
     ```
-2.  **Run the Objective Audit:**
+2.  **Sequential Drift Analysis:**
     ```bash
-    python tests/test_scientific_benchmark.py
+    python tests/test_drift.py
     ```
-3.  **Inspect the Manifold:**
-    Check `tests/results/qcs_graph.png`. Look for high QCS in "Positive" cases and attenuated QCS in "Out of Context" cases.
+3.  **Formal Academic Benchmark:**
+    ```bash
+    python tests/run_academic_benchmark.py
+    ```
 
 ---
 

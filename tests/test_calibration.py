@@ -1,8 +1,16 @@
-import pytest
+import os
+import sys
 import json
 import requests
 import numpy as np
-import os
+import pytest
+
+# Path resolution for standalone utility usage
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+src_dir = os.path.join(base_dir, "src")
+if src_dir not in sys.path:
+    sys.path.append(src_dir)
+
 from quantum_rag_layer.math_engine import calculate_chi_square, calculate_zeta
 from quantum_rag_layer.encoding import text_to_quantum_state
 

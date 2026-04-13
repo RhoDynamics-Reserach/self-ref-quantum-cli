@@ -2,6 +2,13 @@ import pytest
 import numpy as np
 import requests
 import os
+import sys
+
+# Path resolution for standalone utility usage
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+src_dir = os.path.join(base_dir, "src")
+if src_dir not in sys.path:
+    sys.path.append(src_dir)
 
 from quantum_rag_layer.middleware import QuantumMiddleware
 
