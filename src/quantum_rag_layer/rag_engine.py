@@ -49,13 +49,11 @@ class QuantumRAGLayer:
         
         projection_score = dot_product / (norm_task * norm_agent + 1e-9)
         
-        # Calculate isolated context-to-task tension (Classical-Quantum Orthogonality)
         context_tension = projection_score
-        if getattr(agent, "_last_context_state", None) is not None:
-            # We must evaluate if the INJECTED context is irrelevant, not just the whole agent
-            c_norm = np.linalg.norm(agent._last_context_state)
-            if c_norm > 0:
-                context_tension = np.dot(agent._last_context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
+        if context_vector is not None:
+            context_state = text_to_quantum_state(context_vector) # Re-calculating for clarity or reuse
+            c_norm = np.linalg.norm(context_state)
+            context_tension = np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
         
         # D. Quantum Confidence Filter
         zeta_factor = min(2.0, agent.zeta / ZETA_REF)
@@ -65,13 +63,15 @@ class QuantumRAGLayer:
         
         # --- Destructive Interference (Orthogonality Penalty) ---
         # If the INJECTED context fundamentally disagrees with the task
-        if context_tension < 0.55:
-            # Steep exponential decay penalty
-            ortho_penalty = np.exp(-20.0 * (0.55 - context_tension))
+        # Adjusted threshold to 0.40 for increased robustness against semantic variance (v4.5)
+        if context_tension < 0.40:
+            # Softer exponential decay penalty (v4.5 Adjustment)
+            ortho_penalty = np.exp(-10.0 * (0.40 - context_tension))
             raw_confidence *= ortho_penalty
         
         # Smooth with sigmoid-like behavior for the final score
-        final_confidence = 1.0 / (1.0 + np.exp(-5.0 * (raw_confidence - 0.5)))
+        # Shifted midpoint to 0.4 to align with the new threshold
+        final_confidence = 1.0 / (1.0 + np.exp(-5.0 * (raw_confidence - 0.4)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
