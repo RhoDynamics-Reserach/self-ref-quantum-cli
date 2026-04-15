@@ -32,7 +32,7 @@ class QuantumMiddleware:
             
         return BaseQuantumAgent(name=name, knowledge_vector=knowledge_vec, measurement_executor=measurement_executor, seed=seed)
 
-    def process_query(self, agent: BaseQuantumAgent, query: str, context: str, show_metadata: bool = False) -> Tuple[str, dict]:
+    def process_query(self, agent: BaseQuantumAgent, query: str, context: str, show_metadata: bool = False, evolve: bool = True) -> Tuple[str, dict]:
         """
         Takes a user's query and the retrieved context text (from your vector DB),
         processes them through the Quantum RAG pipeline, and returns the modified prompt.
@@ -40,6 +40,7 @@ class QuantumMiddleware:
         Args:
             show_metadata: If True, prints the QCS score directly into the LLM prompt.
                            Default is False (Silent Mode) for production use.
+            evolve: If True, triggers the agent's internal evolution cycle.
         """
         # 1. Embeddings
         query_vec = self._safe_embed(query)
@@ -49,7 +50,8 @@ class QuantumMiddleware:
         q_result = QuantumRAGLayer.process_with_context(
             agent=agent,
             task_vector=query_vec,
-            context_vector=context_vec
+            context_vector=context_vec,
+            evolve=evolve
         )
         qcs = q_result["confidence_score"]
         

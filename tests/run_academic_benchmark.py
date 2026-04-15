@@ -139,16 +139,16 @@ def run_benchmark():
             step_thetas.append(metrics_f["agent_state"]["theta"])
             step_fitness.append(metrics_f["agent_state"]["fitness"])
             
-            # 2. No Zeta Ablation
+            # 2. No Zeta Ablation (FREEZE evolution for accurate baseline)
             agent_nz = p_agents_nz[s]
             agent_nz.zeta = ZETA_REF # Force static zeta
-            _, metrics_nz = middleware.process_query(agent_nz, item["query"], item["context"])
+            _, metrics_nz = middleware.process_query(agent_nz, item["query"], item["context"], evolve=False)
             qrl_no_zeta_scores.append(metrics_nz["confidence_score"])
             
-            # 3. No Chi2 Ablation
+            # 3. No Chi2 Ablation (FREEZE evolution for accurate baseline)
             agent_nc = p_agents_nc[s]
             agent_nc.chi_square = CHI_SQUARE_REF # Force static chi
-            _, metrics_nc = middleware.process_query(agent_nc, item["query"], item["context"])
+            _, metrics_nc = middleware.process_query(agent_nc, item["query"], item["context"], evolve=False)
             qrl_no_chi2_scores.append(metrics_nc["confidence_score"])
             
         mean_full, var_full, ci_full = calc_stats(qrl_full_scores)

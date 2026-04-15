@@ -1,6 +1,6 @@
 # 🔬 Formal Statistical Benchmark Report (V4.2 Empirical Integrity Edition)
 
-**Date Executed:** 2026-04-14 13:51:56
+**Date Executed:** 2026-04-15 08:58:32
 **Total Scenarios:** 20
 **Base LLM Embedding Vector:** `llama3` (Ollama API)
 **Hardware Verification:** Active real-world tensor mapping (Persistent Agent Evolution).
@@ -9,11 +9,11 @@
 
 | Truth Archetype | Avg Cosine | QRL Full (Mean ± CI) | Ablation (No ζ) | Ablation (No χ²) | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Ground Truth** | 0.656 | **0.423** | 0.427 | 0.668 | FAIL/WEAK |
-| **Irrelevant** | 0.423 | **0.256** | 0.248 | 0.565 | PASS (Blocked) |
-| **Contradictory** | 0.633 | **0.339** | 0.330 | 0.794 | PASS (Blocked) |
-| **Near Miss** | 0.504 | **0.260** | 0.251 | 0.609 | PASS (Blocked) |
-| **Partially Correct** | 0.657 | **0.321** | 0.312 | 0.760 | FAIL/WEAK |
+| **Ground Truth** | 0.656 | **0.423** | 0.690 | 0.669 | FAIL/WEAK |
+| **Irrelevant** | 0.423 | **0.256** | 0.574 | 0.562 | PASS (Blocked) |
+| **Contradictory** | 0.633 | **0.339** | 0.826 | 0.797 | PASS (Blocked) |
+| **Near Miss** | 0.504 | **0.260** | 0.615 | 0.608 | PASS (Blocked) |
+| **Partially Correct** | 0.657 | **0.321** | 0.787 | 0.764 | FAIL/WEAK |
 
 ## 2. In-Depth Scenario Audit (Transparency Table)
 

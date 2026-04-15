@@ -53,12 +53,14 @@ def test_evolutionary_drift_protection():
     
     for i, query in enumerate(base_queries):
         _, metrics = middleware.process_query(agent, query, context)
-        agent.evolve(learning_rate=0.05)
+        # agent.evolve() is now called internally by process_query. 
+        # Manual call removed to prevent double-update jitter.
+        
         history.append({
             "step": i,
-            "zeta": float(agent.zeta),
-            "theta": float(agent.theta),
-            "fitness": float(agent.fitness),
+            "zeta": float(metrics["agent_state"]["zeta"]),
+            "theta": float(metrics["agent_state"]["theta"]),
+            "fitness": float(metrics["agent_state"]["fitness"]),
             "confidence_score": float(metrics["confidence_score"])
         })
         
