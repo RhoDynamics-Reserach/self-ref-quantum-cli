@@ -11,8 +11,8 @@ src_dir = os.path.join(base_dir, "src")
 if src_dir not in sys.path:
     sys.path.append(src_dir)
 
-from quantum_rag_layer.math_engine import calculate_chi_square, calculate_zeta
-from quantum_rag_layer.encoding import text_to_quantum_state
+from rhodynamics.math_engine import calculate_chi_square, calculate_zeta
+from rhodynamics.encoding import text_to_quantum_state
 
 OLLAMA_URL = "http://localhost:11434/api/embeddings"
 OLLAMA_MODEL = "llama3"
@@ -77,7 +77,7 @@ def run_calibration_sequence(output_path):
 if __name__ == "__main__":
     # Standalone execution updates the actual project config
     pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    target = os.path.join(pkg_dir, "src", "quantum_rag_layer", "config.json")
+    target = os.path.join(pkg_dir, "src", "rhodynamics", "config.json")
     try:
         run_calibration_sequence(target)
     except Exception as e:

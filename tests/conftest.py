@@ -1,7 +1,7 @@
 import pytest
 import requests
 import os
-from quantum_rag_layer.hardware_connector import QuantumHardwareConnector
+from rhodynamics.hardware_connector import QuantumHardwareConnector
 
 # --- Service Availability Checks ---
 

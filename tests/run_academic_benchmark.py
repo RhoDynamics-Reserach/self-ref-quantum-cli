@@ -11,8 +11,8 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 
-from src.quantum_rag_layer.middleware import QuantumMiddleware
-from src.quantum_rag_layer.math_engine import ZETA_REF, CHI_SQUARE_REF
+from src.rhodynamics.middleware import QuantumMiddleware
+from src.rhodynamics.math_engine import ZETA_REF, CHI_SQUARE_REF
 
 # --- Configuration ---
 OLLAMA_URL = "http://localhost:11434/api/embeddings"

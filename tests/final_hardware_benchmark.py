@@ -17,8 +17,8 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 
-from src.quantum_rag_layer.middleware import QuantumMiddleware
-from src.quantum_rag_layer.hardware_connector import QuantumHardwareConnector
+from src.rhodynamics.middleware import QuantumMiddleware
+from src.rhodynamics.hardware_connector import QuantumHardwareConnector
 
 # --- Configuration ---
 OLLAMA_URL = "http://localhost:11434/api/embeddings"
@@ -34,7 +34,7 @@ def get_embed(text):
 
 def check_ibm():
     try:
-        from src.quantum_rag_layer.hardware_connector import QuantumHardwareConnector
+        from src.rhodynamics.hardware_connector import QuantumHardwareConnector
         connector = QuantumHardwareConnector()
         return connector.is_real_hardware()
     except:
@@ -47,8 +47,8 @@ def test_hardware_proof():
     Quantum RAG - FINAL HARDWARE VALIDATION (QPU-ONLY)
     Executes a real interaction sequence on IBM physical hardware.
     """
-    from src.quantum_rag_layer.hardware_connector import QuantumHardwareConnector
-    from src.quantum_rag_layer.middleware import QuantumMiddleware
+    from src.rhodynamics.hardware_connector import QuantumHardwareConnector
+    from src.rhodynamics.middleware import QuantumMiddleware
     import json
 
     # 1. Initialize Real Hardware

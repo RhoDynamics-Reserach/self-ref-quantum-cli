@@ -1,0 +1,22 @@
+{
+    "timestamp": "2026-04-15T18:46:09.163497",
+    "backend": "ibm_kingston",
+    "results": [
+        [
+            "Ground Truth",
+            0.8585880452723805
+        ],
+        [
+            "Hallucination Trap",
+            0.8534373094994694
+        ],
+        [
+            "Structural Noise",
+            0.8488181026694565
+        ],
+        [
+            "Expert Knowledge",
+            0.7500811485227808
+        ]
+    ]
+}

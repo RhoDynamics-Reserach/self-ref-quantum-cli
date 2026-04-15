@@ -1,15 +1,15 @@
 import pytest
 import numpy as np
-from quantum_rag_layer import QuantumMiddleware, BaseQuantumAgent
+from rhodynamics import QuantumMiddleware, BaseQuantumAgent
 
 def test_package_import_smoke():
     """
     Ensures the package and its core components can be imported without
     triggering heavy dependency errors or circular imports.
     """
-    import quantum_rag_layer
-    from quantum_rag_layer.middleware import QuantumMiddleware
-    from quantum_rag_layer.hardware_connector import QuantumHardwareConnector
+    import rhodynamics
+    from rhodynamics.middleware import QuantumMiddleware
+    from rhodynamics.hardware_connector import QuantumHardwareConnector
     
     assert QuantumMiddleware is not None
     assert QuantumHardwareConnector is not None

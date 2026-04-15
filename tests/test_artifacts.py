@@ -1,7 +1,7 @@
 import json
 import numpy as np
 import pytest
-from quantum_rag_layer import QuantumMiddleware
+from rhodynamics import QuantumMiddleware
 
 def test_calibration_artifact_generation(tmp_path, mock_embedding):
     """
@@ -11,8 +11,8 @@ def test_calibration_artifact_generation(tmp_path, mock_embedding):
     config_path = tmp_path / "config.json"
     
     # Run real logic to get empirical values
-    from quantum_rag_layer.math_engine import calculate_zeta, calculate_chi_square
-    from quantum_rag_layer.encoding import text_to_quantum_state
+    from rhodynamics.math_engine import calculate_zeta, calculate_chi_square
+    from rhodynamics.encoding import text_to_quantum_state
     
     vec = mock_embedding("test text")
     state_probs = text_to_quantum_state(vec)
@@ -42,7 +42,7 @@ def test_drift_artifact_generation(tmp_path, mock_embedding):
     results_dir.mkdir()
     drift_path = results_dir / "drift_results.json"
     
-    from quantum_rag_layer import QuantumMiddleware
+    from rhodynamics import QuantumMiddleware
     middleware = QuantumMiddleware(embedding_function=mock_embedding)
     agent = middleware.create_agent("Test-Agent", seed=42)
     

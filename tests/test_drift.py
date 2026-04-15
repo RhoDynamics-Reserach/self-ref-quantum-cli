@@ -10,7 +10,7 @@ src_dir = os.path.join(base_dir, "src")
 if src_dir not in sys.path:
     sys.path.append(src_dir)
 
-from quantum_rag_layer.middleware import QuantumMiddleware
+from rhodynamics.middleware import QuantumMiddleware
 
 OLLAMA_URL = "http://localhost:11434/api/embeddings"
 OLLAMA_MODEL = "llama3"

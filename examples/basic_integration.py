@@ -9,7 +9,7 @@ if SRC_PATH not in sys.path:
     sys.path.append(SRC_PATH)
 
 import numpy as np
-from quantum_rag_layer.middleware import QuantumMiddleware
+from rhodynamics.middleware import QuantumMiddleware
 
 # 1. Define your embedding function (Mocking one for this example)
 def dummy_embedding(text: str) -> np.ndarray:

@@ -32,6 +32,12 @@ class QuantumMiddleware:
             
         return BaseQuantumAgent(name=name, knowledge_vector=knowledge_vec, measurement_executor=measurement_executor, seed=seed)
 
+    def load_agent(self, filepath: str) -> BaseQuantumAgent:
+        """
+        Loads a pre-trained agent from a serialized JSON file.
+        """
+        return BaseQuantumAgent.load(filepath)
+
     def process_query(self, agent: BaseQuantumAgent, query: str, context: str, show_metadata: bool = False, evolve: bool = True) -> Tuple[str, dict]:
         """
         Takes a user's query and the retrieved context text (from your vector DB),
@@ -55,12 +61,17 @@ class QuantumMiddleware:
         )
         qcs = q_result["confidence_score"]
         
-        # 3. Augment Prompt for the LLM
-        base_prompt = f"Context: {context}\n\nQuestion: {query}"
+        # 3. Dynamic Cognitive Monologue Generation (Auto-Sensory State)
+        monologue = agent.generate_cognitive_monologue()
+        
+        # 4. Prompt Engineering based on QCS
+        base_llm_prompt = f"Context: {context}\n\nQuestion: {query}"
         augmented_prompt = QuantumRAGLayer.augment_prompt_with_confidence(
-            base_prompt=base_prompt,
+            base_prompt=base_llm_prompt,
             confidence=qcs,
-            show_metadata=show_metadata
+            context_text=context,
+            show_metadata=show_metadata,
+            monologue=monologue
         )
         
         return augmented_prompt, q_result

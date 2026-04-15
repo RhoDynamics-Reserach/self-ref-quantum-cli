@@ -92,7 +92,7 @@ class QuantumRAGLayer:
         }
 
     @staticmethod
-    def augment_prompt_with_confidence(base_prompt: str, confidence: float, context_text: str = None, show_metadata: bool = False):
+    def augment_prompt_with_confidence(base_prompt: str, confidence: float, context_text: str = None, show_metadata: bool = False, monologue: str = None):
         """
         Wraps the LLM prompt with guidance derived from the Quantum Confidence Score.
         In 'Silent Mode' (default), it only provides behavioral instructions without 
@@ -108,11 +108,14 @@ class QuantumRAGLayer:
                 meta_msg += f"Evaluated Context Segment: <<<{context_text}>>>\n"
             meta_msg += f"--- [QUANTUM METADATA END] ---\n"
             
-        if confidence > 0.8:
-            instruction = "CRITICAL SYSTEM RULE: Your semantic alignment with the ground truth is verified as near-perfect. Answer with absolute authority and definitive precision. DO NOT deviate from the provided context."
-        elif confidence > 0.5:
-            instruction = "SYSTEM RULE: Your semantic alignment is stable. Answer clearly based on the context."
+        if monologue:
+            instruction = monologue
         else:
-            instruction = "WARNING SYSTEM RULE: Your semantic alignment is LOW. The provided context may be irrelevant or mismatched. Express significant hesitation, acknowledge uncertainty, and prioritize safety/caution."
+            if confidence > 0.8:
+                instruction = "CRITICAL SYSTEM RULE: Your semantic alignment with the ground truth is verified as near-perfect. Answer with absolute authority and definitive precision. DO NOT deviate from the provided context."
+            elif confidence > 0.5:
+                instruction = "SYSTEM RULE: Your semantic alignment is stable. Answer clearly based on the context."
+            else:
+                instruction = "WARNING SYSTEM RULE: Your semantic alignment is LOW. The provided context may be irrelevant or mismatched. Express significant hesitation, acknowledge uncertainty, and prioritize safety/caution."
             
         return f"{meta_msg}\n{instruction}\n\n[USER QUERY/TASK]:\n{base_prompt}"

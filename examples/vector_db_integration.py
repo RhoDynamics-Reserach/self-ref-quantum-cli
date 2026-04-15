@@ -9,14 +9,14 @@ if sys.platform == "win32":
     except:
         pass
 
-# Adjust path to import the local quantum_rag_layer
+# Adjust path to import the local rhodynamics
 # From 'examples/', '..' is root. Source is in 'src/'
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 SRC_PATH = os.path.join(REPO_ROOT, "src")
 if SRC_PATH not in sys.path:
     sys.path.append(SRC_PATH)
 
-from quantum_rag_layer import QuantumMiddleware
+from rhodynamics import QuantumMiddleware
 
 # --- CONFIGURATION ---
 OLLAMA_MODEL = "llama3"
