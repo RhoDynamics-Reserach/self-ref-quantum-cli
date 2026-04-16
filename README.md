@@ -67,11 +67,11 @@ Our final scientific audit (N=20) demonstrates the system's ability to discrimin
 | **Irrelevant** | 0.423 | **0.187 (Avg)** | [bold red]BLOCKED[/bold red] |
 
 ### 📊 Visual Evidence: Cognitive Hardening
-![Stability Evolution](docs/stability_evolution_graph.png)
+![Stability Evolution](docs/gold_stability_evolution.png)
 
 *Figure 1: Autonomous Cognitive Stability ($\zeta$) growth. The agent demonstrates "Knowledge Hardening" over 20+ dense semantic steps, consistently evolving toward higher logical resilience.*
 
-![QCS Discrimination](docs/qcs_graph.png)
+![QCS Discrimination](docs/hardware_honesty_test.png)
 
 *Figure 2: QCS vs. Similarity. Notice the sharp gap between verified ground truth and contradictory hallucinations, providing a clear "Epistemic Guardrail" for the LLM.*
 

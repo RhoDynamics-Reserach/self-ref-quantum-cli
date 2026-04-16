@@ -13,7 +13,7 @@ from rhodynamics.middleware import QuantumMiddleware
 from rhodynamics.hardware_connector import QuantumHardwareConnector
 
 # --- Config ---
-IBM_TOKEN = "oZXPRWuCifryPUhnvc5p5j2i92KTWWNpdbuiGVa4EmSK"
+IBM_TOKEN = os.getenv("IBM_QUANTUM_TOKEN")
 OLLAMA_MODEL = "llama3"
 OLLAMA_URL = "http://localhost:11434/api"
 
