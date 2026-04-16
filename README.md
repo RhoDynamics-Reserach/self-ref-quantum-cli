@@ -123,6 +123,16 @@ Our final scientific audit (N=20) demonstrates the system's ability to discrimin
 
 ---
 
+## 🏛️ Open Source Research Community
+
+RhoDynamics is a collaborative laboratory. We invite researchers and engineers to help us redefine AI grounding.
+
+*   **[Researcher Contribution Guide](./CONTRIBUTING.md)**: How to add new metrics and adapters.
+*   **[Community Agent Showcase](./showcase/README.md)**: Explore and share matured "Gold Assets" from other researchers.
+*   **[Scientific Roadmap](./ROADMAP.md)**: Our vision for the future of epistemic AI.
+
+---
+
 ## 💎 The 'Gold Asset' Protocol
 The library includes pre-matured **"Gold Assets"** (Serialized Cognitive States) that have been evolved on physical IBM hardware.
 - **`Synergy_Master_Gold.rho.json`**: Optimized stability ($\zeta=3.36$) for multidisciplinary research.
