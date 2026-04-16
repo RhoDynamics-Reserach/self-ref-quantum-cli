@@ -24,6 +24,8 @@ wheels/
 # QRL Local Calibration
 config.json
 .env
+*.db
+rho_vault.db
 
 # Test Artifacts/Results
 !tests/results/*.md
