@@ -31,6 +31,40 @@ The system operates in a **Non-Invasive Observation** mode.
 
 ---
 
+## ⚙️ System Workflow: The Quantum Filtration Loop
+
+The RhoDynamics architecture follows a 5-stage sequential loop to ensure absolute cognitive grounding.
+
+```mermaid
+graph TD
+    A[User Query & Context] --> B[Quantum State Encoding]
+    B --> C{Hilbert Manifold Bending}
+    C --> D[QCS Calculation]
+    D --> E{Silent Guardian Trigger}
+    E -- QCS < 0.5 --> F[Red Alert & Monologue Disclosure]
+    E -- QCS >= 0.5 --> G[Authoritative LLM Output]
+    F --> H[Adaptive Self-Reference Evolution]
+    G --> H
+    H --> I[Vault Persistence]
+```
+
+### 1. Ingestion & Encoding
+The query and retrieved context are converted into high-dimensional embedding vectors, which are then mapped to quantum state amplitudes/phases.
+
+### 2. Hilbert Manifold Bending
+The agent's internal knowledge base acts as a "Base Manifold." The injected context is applied as a non-linear operator, "bending" the manifold. Any logical inconsistency creates measurable **Quantum Stress**.
+
+### 3. Metric Extraction (QCS)
+Numerical scores ($\zeta, \chi^2$) are extracted from the bended state. The **Quantum Confidence Score (QCS)** determines the truth-value probability.
+
+### 4. Silent Guardian Intervention
+If QCS is below the **0.40 - 0.50 risk threshold**, the system interrupts the LLM's default behavior, injecting skepticism and revealing the agent's internal reasoning (Monologue).
+
+### 5. Adaptive Evolution
+Regardless of the outcome, the interaction data is used to update the agent's **Zeta ($\zeta$)** and **Fitness** parameters, hardening the manifold against future drift.
+
+---
+
 ## ⌨️ Research Terminal Mastery (CLI)
 
 The `rhodynamics-lab-cli` is a professional-grade research station.
@@ -52,6 +86,18 @@ rhodynamics-cli
 | **6. Evolution** | `status` | Audit Zeta ($\zeta$) and Fitness of the vault nodes. |
 | **7. Analytics** | `research <AgentName>` | Generate academic evolution plots (PNG). |
 | **8. Export** | `export <AgentName>` | Dump the matured **Gold Asset** (.json). |
+
+---
+
+## 🌀 Synergy & Agent Entanglement
+
+The `fuse` command is not a simple text concatenation; it is an **Entanglement Operation** performed on the agent's Hilbert Manifolds.
+
+### The Mechanism
+When two specialists (e.g., a Physicist and a Coder) are fused, RhoDynamics calculates the **Synergy Integral ($S_{int}$)**. This metric measures the **Constructive Interference** between their semantic states.
+- **Entangled State**: The resulting agent shares a single co-dependent probability distribution, allowing for multi-disciplinary reasoning without context switching.
+- **S_int > 0.5**: High Synergy. The agents' perspectives are mutually reinforcing.
+- **S_int < 0.3**: Destructive Interference. The system has detected a fundamental epistemic conflict between the agents' base rules.
 
 ---
 
