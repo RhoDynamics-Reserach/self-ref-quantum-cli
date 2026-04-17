@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from .math_engine import calculate_zeta, calculate_fitness, calculate_chi_square, CHI_SQUARE_REF, ZETA_REF, evolve_parameters
+from .math_engine import calculate_zeta, calculate_fitness, calculate_chi_square, CHI_SQUARE_REF, ZETA_REF, evolve_parameters, calculate_manifold_divergence, calculate_entropy_coefficient
 from .memory import MemoryBuffer, update_stability_dynamically
 
 class BaseQuantumAgent:
@@ -37,6 +37,8 @@ class BaseQuantumAgent:
             # Deterministic initialization baseline
             self.knowledge_vector = np.ones(16) / np.sqrt(16)
             
+        self.birth_vector = self.knowledge_vector.copy()
+            
         # 3. Dynamic Modules
         self.memory = MemoryBuffer(self.tau_m)
         self.history = [] # Track (chi, zeta, fitness) per interaction
@@ -45,6 +47,8 @@ class BaseQuantumAgent:
         self.chi_square = CHI_SQUARE_REF 
         self.zeta = calculate_zeta(self.gamma, self.gamma_decoherence, self.tau_m)
         self.fitness = calculate_fitness(self.chi_square, self.zeta, self.memory_size)
+        self.manifold_divergence = 0.0
+        self.entropy_coefficient = calculate_entropy_coefficient(self.knowledge_vector)
         
     def evaluate_state(self, current_state_probs: np.ndarray):
         """
@@ -75,11 +79,17 @@ class BaseQuantumAgent:
         # C. Total Fitness
         self.fitness = calculate_fitness(self.chi_square, self.zeta, self.memory_size)
         
+        # D. Advanced Topologies
+        self.manifold_divergence = calculate_manifold_divergence(self.birth_vector, self.knowledge_vector)
+        self.entropy_coefficient = calculate_entropy_coefficient(self.knowledge_vector)
+        
         # Record history
         self.history.append({
             "chi": self.chi_square,
             "zeta": self.zeta,
-            "fitness": self.fitness
+            "fitness": self.fitness,
+            "delta_M": self.manifold_divergence,
+            "H_eff": self.entropy_coefficient
         })
         
         return self.fitness
@@ -154,7 +164,9 @@ class BaseQuantumAgent:
             "chi_square": self.chi_square,
             "zeta": self.zeta,
             "fitness": self.fitness,
-            "knowledge_vector": self.knowledge_vector.tolist()
+            "knowledge_vector": self.knowledge_vector.tolist(),
+            "birth_vector": self.birth_vector.tolist(),
+            "history": self.history
         }
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(state, f, indent=4)
@@ -178,5 +190,14 @@ class BaseQuantumAgent:
         instance.chi_square = state["chi_square"]
         instance.zeta = state["zeta"]
         instance.fitness = state["fitness"]
+        if "birth_vector" in state:
+            instance.birth_vector = np.array(state["birth_vector"])
+        else:
+            instance.birth_vector = instance.knowledge_vector.copy()
+            
+        instance.manifold_divergence = calculate_manifold_divergence(instance.birth_vector, instance.knowledge_vector)
+        instance.entropy_coefficient = calculate_entropy_coefficient(instance.knowledge_vector)
+        instance.history = state.get("history", [])
+            
         instance.memory.decay_rate = instance.tau_m
         return instance

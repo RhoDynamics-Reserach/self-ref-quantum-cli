@@ -90,3 +90,42 @@ def evolve_parameters(current_theta: float, current_gamma: float, fitness: float
     new_gamma = max(0.1, min(10.0, new_gamma))
     
     return new_theta, new_gamma
+
+def calculate_manifold_divergence(birth_vector: np.ndarray, current_vector: np.ndarray) -> float:
+    r"""
+    Calculate Manifold Divergence (\Delta M).
+    Measures the Euclidean distance between an agent's current state and its "Birth State"
+    to track evolutionary drift or "forgetting".
+    """
+    if birth_vector is None or current_vector is None:
+        return 0.0
+    if len(birth_vector) != len(current_vector):
+        return 0.0 # Dimension mismatch, cannot compare
+    
+    return float(np.linalg.norm(current_vector - birth_vector))
+
+def calculate_entropy_coefficient(state_vector: np.ndarray) -> float:
+    r"""
+    Calculate the Entropy Coefficient (H_{eff}).
+    A measure of the structural complexity of the information encoded in the agent's Hilbert space.
+    Calculated via von Neumann entropy approximation on the pure state probabilities.
+    """
+    if state_vector is None or len(state_vector) == 0:
+        return 0.0
+    
+    # Probabilities p_i = |c_i|^2
+    probabilities = np.abs(state_vector) ** 2
+    
+    # Normalize just in case
+    prob_sum = np.sum(probabilities)
+    if prob_sum == 0:
+        return 0.0
+    probabilities = probabilities / prob_sum
+    
+    # Calculate Shannon/von Neumann entropy (ignore 0s)
+    entropy = 0.0
+    for p in probabilities:
+        if p > 0:
+            entropy -= p * np.log2(p)
+            
+    return float(entropy)

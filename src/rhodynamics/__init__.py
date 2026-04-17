@@ -2,11 +2,21 @@ from .middleware import QuantumMiddleware
 from .rag_engine import QuantumRAGLayer
 from .agent_model import BaseQuantumAgent
 from .encoding import text_to_quantum_state
-from .math_engine import calculate_zeta, calculate_chi_square, calculate_fitness
+from .math_engine import calculate_zeta, calculate_chi_square, calculate_fitness, calculate_manifold_divergence
 from .synergy import QuantumSynergyEngine
+from .lab import Lab
+from .telemetry import AgentTelemetry
 from . import adapters
 
+# SDK Aliases for ease of use
+Agent = BaseQuantumAgent
+SynergyEngine = QuantumSynergyEngine
+
 __all__ = [
+    "Lab",
+    "Agent",
+    "SynergyEngine",
+    "AgentTelemetry",
     "QuantumMiddleware",
     "QuantumRAGLayer",
     "BaseQuantumAgent",
@@ -15,6 +25,7 @@ __all__ = [
     "calculate_zeta",
     "calculate_chi_square",
     "calculate_fitness",
+    "calculate_manifold_divergence",
     "adapters"
 ]
 

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="rhodynamics",
-    version="1.0.0",
+    version="1.2.0",
     description="RhoDynamics: Quantum-inspired Retrieval-Augmented Generation (Q-RAG) Middleware",
     author="RhoDynamics Research Lab",
     packages=find_packages(where="src"),
@@ -15,6 +15,7 @@ setup(
         "python-dotenv",
         "rich",
         "matplotlib",
+        "seaborn",
         "sqlalchemy",
         "pandas"
     ],

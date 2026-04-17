@@ -68,6 +68,14 @@ class QuantumRAGLayer:
             # Softer exponential decay penalty (v4.5 Adjustment)
             ortho_penalty = np.exp(-10.0 * (0.40 - context_tension))
             raw_confidence *= ortho_penalty
+            
+        # --- Context vs Ground Truth Tension (Epistemic Dissonance) ---
+        # If the context fundamentally contradicts the agent's base knowledge
+        if context_vector is not None:
+            base_tension = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
+            if base_tension < 0.50:
+                epistemic_penalty = np.exp(-15.0 * (0.50 - base_tension))
+                raw_confidence *= epistemic_penalty
         
         # Smooth with sigmoid-like behavior for the final score
         # Shifted midpoint to 0.4 to align with the new threshold

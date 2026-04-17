@@ -10,7 +10,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.live import Live
 from rich import print as rprint
 
-from rhodynamics import QuantumMiddleware, QuantumSynergyEngine
+from rhodynamics import QuantumMiddleware, QuantumSynergyEngine, AgentTelemetry
 from rhodynamics.adapters import OllamaAdapter, OpenAIAdapter, AnthropicAdapter, GeminiAdapter
 from rhodynamics.storage import StorageManager
 
@@ -193,34 +193,45 @@ class RhoDynamicsCLI(cmd.Cmd):
         console.print(Panel(f"Agent [bold cyan]{name}[/bold cyan] exported as:\n[yellow]{os.path.abspath(filename)}[/yellow]", title="Export Complete", border_style="green"))
 
     def do_research(self, arg):
-        """research <AgentName>\nGenerates academic plots from persistent history."""
+        """research <AgentName>\nGenerates academic plots from persistent history using SDK Telemetry."""
         name = arg.strip()
-        history = self.storage.get_history(name)
-        if not history:
-            console.print("[red]No history found for this agent.[/red]")
+        if name not in self.agents:
+            console.print("[red]Agent not found in current session. Use 'load' first.[/red]")
             return
-            
+        
+        agent = self.agents[name]
         try:
-            import matplotlib.pyplot as plt
-            zetas = [h.zeta for h in history]
-            plt.figure(figsize=(10, 4))
-            plt.plot(zetas, marker='o', color='purple', linestyle='--')
-            plt.title(f"Cognitive Stability (Zeta) Evolution - {name}")
-            plt.xlabel("Interaction cycle")
-            plt.ylabel("Zeta")
-            plt.grid(True, alpha=0.3)
             filename = f"research_{name}_plot.png"
-            plt.savefig(filename)
-            console.print(f"[bold green]*[/bold green] Plot generated: [cyan]{filename}[/cyan]")
+            AgentTelemetry.plot_evolution(agent, output_path=filename)
+            console.print(f"[bold green]*[/bold green] Plot generated using SDK Telemetry: [cyan]{filename}[/cyan]")
         except Exception as e:
-            console.print(f"[red]Plotting error: {e}[/red]")
+            console.print(f"[red]Plotting error: {e}[/red]")            
+    def do_load(self, arg):
+        """load <Filename>\nRevives a persistent 'Gold Asset' from JSON."""
+        name = arg.strip()
+        if not os.path.exists(name):
+            console.print(f"[red]File {name} not found.[/red]")
+            return
+        try:
+            from rhodynamics.agent_model import BaseQuantumAgent
+            agent = BaseQuantumAgent.load(name)
+            self.agents[agent.name] = agent
+            console.print(f"[bold green]*[/bold green] Agent [bold cyan]{agent.name}[/bold cyan] loaded successfully from {name}.")
+        except Exception as e:
+            console.print(f"[red]Error loading agent: {e}[/red]")
 
     def do_status(self, arg):
         """status\nFull manifold status."""
         table = Table(title="Vault Status", header_style="bold magenta")
-        table.add_column("Name"); table.add_column("Zeta"); table.add_column("Tau"); table.add_column("Fitness")
+        table.add_column("Name"); table.add_column("Zeta"); table.add_column("Delta M"); table.add_column("H_eff"); table.add_column("Fitness")
         for n, a in self.agents.items():
-            table.add_row(n, f"{a.zeta:.3f}", f"{a.tau_m:.2f}", f"{a.fitness:.3f}")
+            table.add_row(
+                n, 
+                f"{a.zeta:.3f}", 
+                f"{getattr(a, 'manifold_divergence', 0.0):.3f}", 
+                f"{getattr(a, 'entropy_coefficient', 0.0):.3f}", 
+                f"{a.fitness:.3f}"
+            )
         console.print(table)
 
     def do_clear(self, arg):
