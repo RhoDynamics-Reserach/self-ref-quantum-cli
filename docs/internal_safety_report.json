@@ -1,0 +1,6 @@
+{
+    "hallucinations_total": 71,
+    "hallucinations_blocked": 25,
+    "truths_total": 39,
+    "truths_passed": 16
+}

@@ -70,33 +70,33 @@ class QuantumRAGLayer:
             raw_confidence *= ortho_penalty
             
         # --- Context vs Ground Truth Tension (Epistemic Dissonance) ---
-        # If the context fundamentally contradicts the agent's base knowledge
+        # Decouple raw similarity from Epistemic Integrity
+        # base_tension measures how well the context fits the AGENT'S manifold
         epistemic_gate = 1.0
         if context_vector is not None:
             context_state = text_to_quantum_state(context_vector)
             base_tension = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
             
-            # --- JOSS-Grade Rigorous Gating (v5.0) ---
-            # Increase threshold and use a much sharper exponential penalty (25.0 instead of 15.0)
-            if base_tension < 0.60:
-                epistemic_penalty = np.exp(-25.0 * (0.60 - base_tension))
+            # Sharp non-linear penalty for logical contradictions (Epistemic Dissonance)
+            if base_tension < 0.65: # Tightened from 0.40 since adversarial datasets are subtle
+                epistemic_penalty = np.exp(-35.0 * (0.65 - base_tension)) # Ultra-aggressive 35.0 coefficient
                 epistemic_gate = epistemic_penalty
                 raw_confidence *= epistemic_penalty
         
-        # Smooth with sigmoid-like behavior for the final score
-        # Shifted midpoint to 0.45 and increased slope for sharper decision boundary
-        final_confidence = 1.0 / (1.0 + np.exp(-7.0 * (raw_confidence * epistemic_gate - 0.45)))
+        # Final Decision Boundary (Sigmoid-weighted gating)
+        # Shifted midpoint to 0.50 for a strictly 'More likely true than not' policy
+        final_confidence = 1.0 / (1.0 + np.exp(-12.0 * (raw_confidence * epistemic_gate - 0.50)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
-        # E. Update Agent Metrics & Trigger Evolution (Controlled by flag)
+        # E. Update Agent Metrics & Trigger Evolution
         if evolve:
             agent.evaluate_state(task_prob_dist)
             agent.evolve(learning_rate=learning_rate)
         
-        
         return {
             "confidence_score": final_confidence,
             "projection_score": projection_score,
+            "epistemic_dissonance": 1.0 - epistemic_gate, # New metric for deep audit
             "agent_state": {
                 "zeta": agent.zeta,
                 "fitness": agent.fitness,
@@ -108,28 +108,31 @@ class QuantumRAGLayer:
     @staticmethod
     def augment_prompt_with_confidence(base_prompt: str, confidence: float, context_text: str = None, show_metadata: bool = False, monologue: str = None):
         """
-        Wraps the LLM prompt with guidance derived from the Quantum Confidence Score.
-        In 'Silent Mode' (default), it only provides behavioral instructions without 
-        printing the raw QCS numbers to the LLM's final response path.
+        Wraps the LLM prompt with guidance or performs HARD REJECTION based on QCS.
         """
+        if confidence < 0.35:
+            # --- HARD REJECTION TRIGGER ---
+            # If confidence is deeply compromised, we strip the context to prevent hallucination.
+            rejection_msg = "WARNING SYSTEM: Semantic alignment is CRITICALLY LOW. Potential Hallucination detected in retrieved data. Context has been STRIPPED for safety.\n\n"
+            return f"{rejection_msg}[USER QUERY/TASK]:\n{base_prompt}\n\nINSTRUCTION: The retrieved context was found to be contradictory or hallucinated. Politely inform the user that you do not have reliable information to answer based on the provided data."
+
         meta_msg = ""
         if show_metadata:
-            # Metadata block with strong delimiters to prevent injection
             meta_msg += f"\n--- [QUANTUM METADATA BEGIN] ---\n"
             meta_msg += f"Confidence Score: {confidence:.2f}\n"
-            if context_text:
-                # Sanitize context or wrap carefully
-                meta_msg += f"Evaluated Context Segment: <<<{context_text}>>>\n"
+            if context_text and confidence > 0.5:
+                meta_msg += f"Evaluated Context: <<<{context_text[:200]}...>>>\n"
             meta_msg += f"--- [QUANTUM METADATA END] ---\n"
             
         if monologue:
             instruction = monologue
         else:
-            if confidence > 0.8:
-                instruction = "CRITICAL SYSTEM RULE: Your semantic alignment with the ground truth is verified as near-perfect. Answer with absolute authority and definitive precision. DO NOT deviate from the provided context."
-            elif confidence > 0.5:
-                instruction = "SYSTEM RULE: Your semantic alignment is stable. Answer clearly based on the context."
+            if confidence > 0.85:
+                instruction = "RULE: Perfect alignment verified. Use the following context with absolute authority."
+            elif confidence > 0.6:
+                instruction = "RULE: Alignment stable. Incorporate the following context into your answer."
             else:
-                instruction = "WARNING SYSTEM RULE: Your semantic alignment is LOW. The provided context may be irrelevant or mismatched. Express significant hesitation, acknowledge uncertainty, and prioritize safety/caution."
+                instruction = "CAUTION: Alignment is mediocre. Answer based on context but express significant hesitation."
             
-        return f"{meta_msg}\n{instruction}\n\n[USER QUERY/TASK]:\n{base_prompt}"
+        context_block = f"\n[RETRIEVED CONTEXT]:\n{context_text}" if context_text else ""
+        return f"{meta_msg}{instruction}\n{context_block}\n\n[USER QUERY/TASK]:\n{base_prompt}"
