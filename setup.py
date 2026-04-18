@@ -20,7 +20,11 @@ setup(
         "pandas"
     ],
     extras_require={
-        "hardware": ["qiskit-ibm-runtime"]
+        "hardware": ["qiskit-ibm-runtime", "pylatexenc"],
+        "openai": ["openai"],
+        "anthropic": ["anthropic"],
+        "benchmarks": ["sentence-transformers"],
+        "test": ["pytest", "pytest-cov"]
     },
     classifiers=[
         "Programming Language :: Python :: 3",

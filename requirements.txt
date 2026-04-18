@@ -7,3 +7,12 @@ python-dotenv
 pytest
 matplotlib
 pylatexenc
+sqlalchemy
+rich
+pandas
+seaborn
+sentence-transformers
+wheel
+build
+openai
+anthropic
