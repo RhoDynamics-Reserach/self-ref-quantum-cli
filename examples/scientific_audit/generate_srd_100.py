@@ -87,11 +87,11 @@ def generate_srd_100():
         })
 
     # Save to JSON
-    os.makedirs('benchmarks', exist_ok=True)
-    with open('benchmarks/SRD_100.json', 'w') as f:
+    data_path = os.path.join(os.path.dirname(__file__), 'SRD_100.json')
+    with open(data_path, 'w') as f:
         json.dump(dataset, f, indent=4)
     
-    print(f"Successfully generated SRD-100 with {len(dataset)} high-quality samples.")
+    print(f"Successfully generated SRD-100 with {len(dataset)} high-quality samples at {data_path}")
 
 if __name__ == "__main__":
     generate_srd_100()

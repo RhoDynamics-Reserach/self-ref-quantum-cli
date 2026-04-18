@@ -9,7 +9,7 @@ from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 # Adjust path to include src
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 from rhodynamics import Lab
 
@@ -28,7 +28,12 @@ class IndustryBaseline:
 
 def run_rigor_benchmark():
     # 1. Setup
-    with open('benchmarks/SRD_100.json', 'r') as f:
+    data_path = os.path.join(os.path.dirname(__file__), 'SRD_100.json')
+    if not os.path.exists(data_path):
+        print(f"Error: {data_path} not found. Run generate_srd_100.py first.")
+        return
+        
+    with open(data_path, 'r') as f:
         dataset = json.load(f)
     
     baseline = IndustryBaseline()
