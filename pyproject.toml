@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rhodynamics"
+version = "1.2.0"
+description = "RhoDynamics: Quantum-inspired Retrieval-Augmented Generation (Q-RAG) Middleware"
+readme = "README.md"
+authors = [{ name = "Alperen Göksel", email = "research@rhodynamics.lab" }]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "requests",
+    "qiskit>=1.0.0",
+    "qiskit-aer",
+    "python-dotenv",
+    "rich",
+    "matplotlib",
+    "seaborn",
+    "sqlalchemy",
+    "pandas"
+]
+
+[project.optional-dependencies]
+hardware = ["qiskit-ibm-runtime", "pylatexenc"]
+openai = ["openai"]
+anthropic = ["anthropic"]
+benchmarks = ["sentence-transformers"]
+test = ["pytest", "pytest-cov"]
+
+[project.urls]
+Homepage = "https://github.com/RhoDynamics-Reserach/self-ref-quantum-cli"
+Repository = "https://github.com/RhoDynamics-Reserach/self-ref-quantum-cli"
+
+[project.scripts]
+rhodynamics-cli = "rhodynamics.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["rhodynamics", "rhodynamics.adapters"]

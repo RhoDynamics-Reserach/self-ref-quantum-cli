@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as follows:"
+authors:
+  - family-names: "Göksel"
+    given-names: "Alperen"
+    orcid: "https://orcid.org/0009-0005-1963-3478"
+title: "RhoDynamics: A Hybrid Quantum-Classical Framework for Adaptive RAG and Epistemic Filtering"
+version: 1.2.0
+doi: 10.5281/zenodo.0000000  # Placeholder until final archive
+date-released: 2026-03-31
+url: "https://github.com/RhoDynamics-Reserach/self-ref-quantum-cli"
+repository-code: "https://github.com/RhoDynamics-Reserach/self-ref-quantum-cli"
+keywords:
+  - quantum computing
+  - large language models
+  - retrieval-augmented generation
+  - hallucination detection
+license: MIT

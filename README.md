@@ -152,7 +152,7 @@ The library includes pre-matured **"Gold Assets"** (Serialized Cognitive States)
 
 ## 🧪 Installation
 ```bash
-pip install rhodynamics-lab-cli
+pip install rhodynamics
 # Or from source
 pip install -e .
 ```
@@ -160,4 +160,4 @@ pip install -e .
 ---
 
 ## 📜 Stage and License
-Licensed under **MIT**. This project is currently an **Advanced Research Prototype (v2.6.0)**. Use for academic and high-integrity AI research.
+Licensed under **MIT**. This project is currently an **Advanced Research Prototype (v1.2.0)**. Use for academic and high-integrity AI research.
