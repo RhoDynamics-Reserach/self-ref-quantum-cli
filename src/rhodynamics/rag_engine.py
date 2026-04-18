@@ -78,14 +78,14 @@ class QuantumRAGLayer:
             base_tension = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
             
             # Sharp non-linear penalty for logical contradictions (Epistemic Dissonance)
-            if base_tension < 0.65: # Tightened from 0.40 since adversarial datasets are subtle
-                epistemic_penalty = np.exp(-35.0 * (0.65 - base_tension)) # Ultra-aggressive 35.0 coefficient
+            if base_tension < 0.48: # Softened from 0.65 to prevent blocking valid facts
+                epistemic_penalty = np.exp(-20.0 * (0.48 - base_tension)) # Reduced from 35.0
                 epistemic_gate = epistemic_penalty
                 raw_confidence *= epistemic_penalty
         
         # Final Decision Boundary (Sigmoid-weighted gating)
-        # Shifted midpoint to 0.50 for a strictly 'More likely true than not' policy
-        final_confidence = 1.0 / (1.0 + np.exp(-12.0 * (raw_confidence * epistemic_gate - 0.50)))
+        # Shifted midpoint to 0.45 for a more balanced safety/utility policy
+        final_confidence = 1.0 / (1.0 + np.exp(-10.0 * (raw_confidence * epistemic_gate - 0.45)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
@@ -96,7 +96,7 @@ class QuantumRAGLayer:
         return {
             "confidence_score": final_confidence,
             "projection_score": projection_score,
-            "epistemic_dissonance": 1.0 - epistemic_gate, # New metric for deep audit
+            "epistemic_dissonance": 1.0 - epistemic_gate,
             "agent_state": {
                 "zeta": agent.zeta,
                 "fitness": agent.fitness,

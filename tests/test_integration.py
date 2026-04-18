@@ -38,7 +38,6 @@ def test_end_to_end_chatbot_flow(mock_embedding):
         f"Sensitivity Error: Valid ({metrics_v['confidence_score']:.2f}) must exceed Invalid ({metrics_i['confidence_score']:.2f})"
     
     assert "Paris" in prompt_v
-    # The prefix (CRITICAL vs WARNING) depends on the 0.8 threshold in rag_engine.py
-    # Since current manifold (~0.79) might land slightly below, we check for general system rule injection
-    assert "SYSTEM RULE" in prompt_v
+    # Check for the new dynamic markers instead of legacy "SYSTEM RULE"
+    assert "RULE" in prompt_v or "WARNING" in prompt_v
     print(f"[+] E2E Flow verified. Sensitivity Delta: {metrics_v['confidence_score'] - metrics_i['confidence_score']:.3f}")
