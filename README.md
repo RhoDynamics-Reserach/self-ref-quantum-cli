@@ -5,7 +5,7 @@
 [![Status: Advanced Prototype](https://img.shields.io/badge/Status-Advanced_Research_Prototype-orange.svg)]()
 [![Hardware](https://img.shields.io/badge/Backend-IBM_QPU-blueviolet.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
+[![DOI](https://zenodo.org/badge/1211798452.svg)](https://doi.org/10.5281/zenodo.19642824)
 ---
 
 ## 📜 Scientific Core (Manuscript 202603.1098)
