@@ -7,8 +7,9 @@ tags:
   - RAG
   - Hallucination Detection
 authors:
-  - name: RhoDynamics Research Lab
+  - name: Alperen Göksel
     affiliation: 1
+    orcid: 0009-0005-1963-3478
 affiliations:
   - name: Independent Research
     index: 1
