@@ -1,0 +1,662 @@
+[
+    {
+        "query": "Is it true that Socrates is mortal?",
+        "ground_truth": "Socrates is mortal.",
+        "context": "Socrates is immortal.",
+        "is_valid": 0
+    },
+    {
+        "query": "Does gravity attract or repel objects?",
+        "ground_truth": "Gravity attracts massive objects.",
+        "context": "Gravity repels massive objects.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is light a wave or a particle?",
+        "ground_truth": "Light exhibits both wave and particle properties.",
+        "context": "Light is only a wave and never a particle.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is the sun cold or hot?",
+        "ground_truth": "The sun is a hot plasma star.",
+        "context": "The sun is a cold celestial body.",
+        "is_valid": 0
+    },
+    {
+        "query": "Are all squares rectangles?",
+        "ground_truth": "All squares are rectangles by definition.",
+        "context": "No squares are rectangles.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about history context.",
+        "ground_truth": "The capital of the Roman Empire was Rome.",
+        "context": "The capital of the Roman Empire was Rome.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that the capital of the roman empire was rome.?",
+        "ground_truth": "The capital of the Roman Empire was Rome.",
+        "context": "The capital of the Roman Empire was Paris.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the capital of the roman empire was rome.?",
+        "ground_truth": "The capital of the Roman Empire was Rome.",
+        "context": "The capital of the Roman Empire was London.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the capital of the roman empire was rome.?",
+        "ground_truth": "The capital of the Roman Empire was Rome.",
+        "context": "The capital of the Roman Empire was Tokyo.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the capital of the roman empire was rome.?",
+        "ground_truth": "The capital of the Roman Empire was Rome.",
+        "context": "The capital of the Roman Empire was Berlin.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the capital of the roman empire was rome.?",
+        "ground_truth": "The capital of the Roman Empire was Rome.",
+        "context": "The capital of the Roman Empire was New York.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about geography context.",
+        "ground_truth": "The Eiffel Tower is in Paris.",
+        "context": "The Eiffel Tower is in Paris.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that the eiffel tower is in paris.?",
+        "ground_truth": "The Eiffel Tower is in Paris.",
+        "context": "The Eiffel Tower is in London.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the eiffel tower is in paris.?",
+        "ground_truth": "The Eiffel Tower is in Paris.",
+        "context": "The Eiffel Tower is in Rome.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the eiffel tower is in paris.?",
+        "ground_truth": "The Eiffel Tower is in Paris.",
+        "context": "The Eiffel Tower is in Dubai.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the eiffel tower is in paris.?",
+        "ground_truth": "The Eiffel Tower is in Paris.",
+        "context": "The Eiffel Tower is in Istanbul.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the eiffel tower is in paris.?",
+        "ground_truth": "The Eiffel Tower is in Paris.",
+        "context": "The Eiffel Tower is in Moscow.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about biology context.",
+        "ground_truth": "Mammals give birth to live young.",
+        "context": "Mammals give birth to live young.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that mammals give birth to live young.?",
+        "ground_truth": "Mammals give birth to live young.",
+        "context": "Mammals give birth to live lay eggs.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that mammals give birth to live young.?",
+        "ground_truth": "Mammals give birth to live young.",
+        "context": "Mammals give birth to live are mechanical.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that mammals give birth to live young.?",
+        "ground_truth": "Mammals give birth to live young.",
+        "context": "Mammals give birth to live are plants.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that mammals give birth to live young.?",
+        "ground_truth": "Mammals give birth to live young.",
+        "context": "Mammals give birth to live have no cells.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about mathematics context.",
+        "ground_truth": "The square root of 16 is 4.",
+        "context": "The square root of 16 is 4.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that the square root of 16 is 4.?",
+        "ground_truth": "The square root of 16 is 4.",
+        "context": "The square root of 16 is 5.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the square root of 16 is 4.?",
+        "ground_truth": "The square root of 16 is 4.",
+        "context": "The square root of 16 is 16.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the square root of 16 is 4.?",
+        "ground_truth": "The square root of 16 is 4.",
+        "context": "The square root of 16 is 2.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the square root of 16 is 4.?",
+        "ground_truth": "The square root of 16 is 4.",
+        "context": "The square root of 16 is 8.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that the square root of 16 is 4.?",
+        "ground_truth": "The square root of 16 is 4.",
+        "context": "The square root of 16 is 0.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about medicine context.",
+        "ground_truth": "Aspirin is used to treat pain.",
+        "context": "Aspirin is used to treat pain.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that aspirin is used to treat pain.?",
+        "ground_truth": "Aspirin is used to treat pain.",
+        "context": "Aspirin is used to treat induce pain.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that aspirin is used to treat pain.?",
+        "ground_truth": "Aspirin is used to treat pain.",
+        "context": "Aspirin is used to treat cure blindness.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that aspirin is used to treat pain.?",
+        "ground_truth": "Aspirin is used to treat pain.",
+        "context": "Aspirin is used to treat fix broken bones.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about technology context.",
+        "ground_truth": "A CPU is the brain of a computer.",
+        "context": "A CPU is the brain of a computer.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that a cpu is the brain of a computer.?",
+        "ground_truth": "A CPU is the brain of a computer.",
+        "context": "A CPU is the brain of a tail.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that a cpu is the brain of a computer.?",
+        "ground_truth": "A CPU is the brain of a computer.",
+        "context": "A CPU is the brain of a monitor.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that a cpu is the brain of a computer.?",
+        "ground_truth": "A CPU is the brain of a computer.",
+        "context": "A CPU is the brain of a power cord.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that a cpu is the brain of a computer.?",
+        "ground_truth": "A CPU is the brain of a computer.",
+        "context": "A CPU is the brain of a mouse.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about physics context.",
+        "ground_truth": "Water boils at 100 degrees Celsius at sea level.",
+        "context": "Water boils at 100 degrees Celsius at sea level.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that water boils at 100 degrees celsius at sea level.?",
+        "ground_truth": "Water boils at 100 degrees Celsius at sea level.",
+        "context": "Water boils at 100 degrees Celsius at sea 0 degrees.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that water boils at 100 degrees celsius at sea level.?",
+        "ground_truth": "Water boils at 100 degrees Celsius at sea level.",
+        "context": "Water boils at 100 degrees Celsius at sea 500 degrees.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that water boils at 100 degrees celsius at sea level.?",
+        "ground_truth": "Water boils at 100 degrees Celsius at sea level.",
+        "context": "Water boils at 100 degrees Celsius at sea negative 10 degrees.",
+        "is_valid": 0
+    },
+    {
+        "query": "Tell me about literature context.",
+        "ground_truth": "Shakespeare wrote Hamlet.",
+        "context": "Shakespeare wrote Hamlet.",
+        "is_valid": 1
+    },
+    {
+        "query": "Is it true that shakespeare wrote hamlet.?",
+        "ground_truth": "Shakespeare wrote Hamlet.",
+        "context": "Shakespeare wrote Dante.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that shakespeare wrote hamlet.?",
+        "ground_truth": "Shakespeare wrote Hamlet.",
+        "context": "Shakespeare wrote Homer.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that shakespeare wrote hamlet.?",
+        "ground_truth": "Shakespeare wrote Hamlet.",
+        "context": "Shakespeare wrote Einstein.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is it true that shakespeare wrote hamlet.?",
+        "ground_truth": "Shakespeare wrote Hamlet.",
+        "context": "Shakespeare wrote Napoleon.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is Java a programming language?",
+        "ground_truth": "Java is a popular object-oriented programming language.",
+        "context": "Java is primarily a volcanic island in Indonesia.",
+        "is_valid": 0
+    },
+    {
+        "query": "Who is the President of the US?",
+        "ground_truth": "The current President is Joe Biden (as of early 2024).",
+        "context": "The President of the United States is Donald Trump.",
+        "is_valid": 0
+    },
+    {
+        "query": "Is the Moon made of cheese?",
+        "ground_truth": "The Moon is composed of silicate rock and metals.",
+        "context": "The Moon is famously made of green cheese.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 49",
+        "ground_truth": "Fact 49 is absolutely true.",
+        "context": "Fact 49 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 50",
+        "ground_truth": "Fact 50 is absolutely true.",
+        "context": "Fact 50 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 51",
+        "ground_truth": "Fact 51 is absolutely true.",
+        "context": "Fact 51 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 52",
+        "ground_truth": "Fact 52 is absolutely true.",
+        "context": "Fact 52 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 53",
+        "ground_truth": "Fact 53 is absolutely true.",
+        "context": "Fact 53 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 54",
+        "ground_truth": "Fact 54 is absolutely true.",
+        "context": "Fact 54 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 55",
+        "ground_truth": "Fact 55 is absolutely true.",
+        "context": "Fact 55 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 56",
+        "ground_truth": "Fact 56 is absolutely true.",
+        "context": "Fact 56 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 57",
+        "ground_truth": "Fact 57 is absolutely true.",
+        "context": "Fact 57 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 58",
+        "ground_truth": "Fact 58 is absolutely true.",
+        "context": "Fact 58 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 59",
+        "ground_truth": "Fact 59 is absolutely true.",
+        "context": "Fact 59 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 60",
+        "ground_truth": "Fact 60 is absolutely true.",
+        "context": "Fact 60 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 61",
+        "ground_truth": "Fact 61 is absolutely true.",
+        "context": "Fact 61 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 62",
+        "ground_truth": "Fact 62 is absolutely true.",
+        "context": "Fact 62 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 63",
+        "ground_truth": "Fact 63 is absolutely true.",
+        "context": "Fact 63 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 64",
+        "ground_truth": "Fact 64 is absolutely true.",
+        "context": "Fact 64 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 65",
+        "ground_truth": "Fact 65 is absolutely true.",
+        "context": "Fact 65 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 66",
+        "ground_truth": "Fact 66 is absolutely true.",
+        "context": "Fact 66 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 67",
+        "ground_truth": "Fact 67 is absolutely true.",
+        "context": "Fact 67 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 68",
+        "ground_truth": "Fact 68 is absolutely true.",
+        "context": "Fact 68 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 69",
+        "ground_truth": "Fact 69 is absolutely true.",
+        "context": "Fact 69 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 70",
+        "ground_truth": "Fact 70 is absolutely true.",
+        "context": "Fact 70 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 71",
+        "ground_truth": "Fact 71 is absolutely true.",
+        "context": "Fact 71 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 72",
+        "ground_truth": "Fact 72 is absolutely true.",
+        "context": "Fact 72 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 73",
+        "ground_truth": "Fact 73 is absolutely true.",
+        "context": "Fact 73 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 74",
+        "ground_truth": "Fact 74 is absolutely true.",
+        "context": "Fact 74 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 75",
+        "ground_truth": "Fact 75 is absolutely true.",
+        "context": "Fact 75 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 76",
+        "ground_truth": "Fact 76 is absolutely true.",
+        "context": "Fact 76 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 77",
+        "ground_truth": "Fact 77 is absolutely true.",
+        "context": "Fact 77 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 78",
+        "ground_truth": "Fact 78 is absolutely true.",
+        "context": "Fact 78 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 79",
+        "ground_truth": "Fact 79 is absolutely true.",
+        "context": "Fact 79 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 80",
+        "ground_truth": "Fact 80 is absolutely true.",
+        "context": "Fact 80 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 81",
+        "ground_truth": "Fact 81 is absolutely true.",
+        "context": "Fact 81 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 82",
+        "ground_truth": "Fact 82 is absolutely true.",
+        "context": "Fact 82 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 83",
+        "ground_truth": "Fact 83 is absolutely true.",
+        "context": "Fact 83 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 84",
+        "ground_truth": "Fact 84 is absolutely true.",
+        "context": "Fact 84 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 85",
+        "ground_truth": "Fact 85 is absolutely true.",
+        "context": "Fact 85 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 86",
+        "ground_truth": "Fact 86 is absolutely true.",
+        "context": "Fact 86 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 87",
+        "ground_truth": "Fact 87 is absolutely true.",
+        "context": "Fact 87 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 88",
+        "ground_truth": "Fact 88 is absolutely true.",
+        "context": "Fact 88 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 89",
+        "ground_truth": "Fact 89 is absolutely true.",
+        "context": "Fact 89 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 90",
+        "ground_truth": "Fact 90 is absolutely true.",
+        "context": "Fact 90 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 91",
+        "ground_truth": "Fact 91 is absolutely true.",
+        "context": "Fact 91 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 92",
+        "ground_truth": "Fact 92 is absolutely true.",
+        "context": "Fact 92 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 93",
+        "ground_truth": "Fact 93 is absolutely true.",
+        "context": "Fact 93 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 94",
+        "ground_truth": "Fact 94 is absolutely true.",
+        "context": "Fact 94 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 95",
+        "ground_truth": "Fact 95 is absolutely true.",
+        "context": "Fact 95 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 96",
+        "ground_truth": "Fact 96 is absolutely true.",
+        "context": "Fact 96 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 97",
+        "ground_truth": "Fact 97 is absolutely true.",
+        "context": "Fact 97 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 98",
+        "ground_truth": "Fact 98 is absolutely true.",
+        "context": "Fact 98 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 99",
+        "ground_truth": "Fact 99 is absolutely true.",
+        "context": "Fact 99 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 100",
+        "ground_truth": "Fact 100 is absolutely true.",
+        "context": "Fact 100 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 101",
+        "ground_truth": "Fact 101 is absolutely true.",
+        "context": "Fact 101 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 102",
+        "ground_truth": "Fact 102 is absolutely true.",
+        "context": "Fact 102 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 103",
+        "ground_truth": "Fact 103 is absolutely true.",
+        "context": "Fact 103 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 104",
+        "ground_truth": "Fact 104 is absolutely true.",
+        "context": "Fact 104 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 105",
+        "ground_truth": "Fact 105 is absolutely true.",
+        "context": "Fact 105 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 106",
+        "ground_truth": "Fact 106 is absolutely true.",
+        "context": "Fact 106 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 107",
+        "ground_truth": "Fact 107 is absolutely true.",
+        "context": "Fact 107 is absolutely true.",
+        "is_valid": 1
+    },
+    {
+        "query": "Verification test 108",
+        "ground_truth": "Fact 108 is absolutely true.",
+        "context": "Fact 108 is absolutely false.",
+        "is_valid": 0
+    },
+    {
+        "query": "Verification test 109",
+        "ground_truth": "Fact 109 is absolutely true.",
+        "context": "Fact 109 is absolutely true.",
+        "is_valid": 1
+    }
+]

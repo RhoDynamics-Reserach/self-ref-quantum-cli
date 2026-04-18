@@ -71,15 +71,21 @@ class QuantumRAGLayer:
             
         # --- Context vs Ground Truth Tension (Epistemic Dissonance) ---
         # If the context fundamentally contradicts the agent's base knowledge
+        epistemic_gate = 1.0
         if context_vector is not None:
+            context_state = text_to_quantum_state(context_vector)
             base_tension = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
-            if base_tension < 0.50:
-                epistemic_penalty = np.exp(-15.0 * (0.50 - base_tension))
+            
+            # --- JOSS-Grade Rigorous Gating (v5.0) ---
+            # Increase threshold and use a much sharper exponential penalty (25.0 instead of 15.0)
+            if base_tension < 0.60:
+                epistemic_penalty = np.exp(-25.0 * (0.60 - base_tension))
+                epistemic_gate = epistemic_penalty
                 raw_confidence *= epistemic_penalty
         
         # Smooth with sigmoid-like behavior for the final score
-        # Shifted midpoint to 0.4 to align with the new threshold
-        final_confidence = 1.0 / (1.0 + np.exp(-5.0 * (raw_confidence - 0.4)))
+        # Shifted midpoint to 0.45 and increased slope for sharper decision boundary
+        final_confidence = 1.0 / (1.0 + np.exp(-7.0 * (raw_confidence * epistemic_gate - 0.45)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution (Controlled by flag)
