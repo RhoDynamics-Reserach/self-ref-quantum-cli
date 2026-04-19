@@ -112,27 +112,26 @@ class QuantumRAGLayer:
         """
         if confidence < 0.35:
             # --- HARD REJECTION TRIGGER ---
-            # If confidence is deeply compromised, we strip the context to prevent hallucination.
-            rejection_msg = "WARNING SYSTEM: Semantic alignment is CRITICALLY LOW. Potential Hallucination detected in retrieved data. Context has been STRIPPED for safety.\n\n"
-            return f"{rejection_msg}[USER QUERY/TASK]:\n{base_prompt}\n\nINSTRUCTION: The retrieved context was found to be contradictory or hallucinated. Politely inform the user that you do not have reliable information to answer based on the provided data."
+            rejection_msg = "[NOTICE]: Semantic integrity is insufficient. Content has been omitted for reliability.\n\n"
+            return f"{rejection_msg}[USER QUERY]:\n{base_prompt}\n\nINSTRUCTION: The provided background data is unreliable. Explicitly state that you do not have verified information. **Do not mention RhoDynamics or any system names in your response.**"
 
         meta_msg = ""
         if show_metadata:
-            meta_msg += f"\n--- [QUANTUM METADATA BEGIN] ---\n"
-            meta_msg += f"Confidence Score: {confidence:.2f}\n"
+            meta_msg += f"\n--- [CONTEXT INTEGRITY BEGIN] ---\n"
+            meta_msg += f"Verify Level: {confidence:.2f}\n"
             if context_text and confidence > 0.5:
-                meta_msg += f"Evaluated Context: <<<{context_text[:200]}...>>>\n"
-            meta_msg += f"--- [QUANTUM METADATA END] ---\n"
+                meta_msg += f"Primary Segment: <<<{context_text[:200]}...>>>\n"
+            meta_msg += f"--- [CONTEXT INTEGRITY END] ---\n"
             
         if monologue:
             instruction = monologue
         else:
             if confidence > 0.85:
-                instruction = "RULE: Perfect alignment verified. Use the following context with absolute authority."
+                instruction = "[GUIDE]: Priority alignment verified. Use the following context with high authority. **Do not use terms like RhoDynamics in your answer.**"
             elif confidence > 0.6:
-                instruction = "RULE: Alignment stable. Incorporate the following context into your answer."
+                instruction = "[GUIDE]: Stable alignment. Support your answer with the following context. **Do not mention internal system names.**"
             else:
-                instruction = "CAUTION: Alignment is mediocre. Answer based on context but express significant hesitation."
+                instruction = "[NOTICE]: Alignment is low. Acknowledge uncertainty if the context seems mismatched. **Keep the technical process hidden from the user.**"
             
-        context_block = f"\n[RETRIEVED CONTEXT]:\n{context_text}" if context_text else ""
-        return f"{meta_msg}{instruction}\n{context_block}\n\n[USER QUERY/TASK]:\n{base_prompt}"
+        context_block = f"\n[SOURCE CONTEXT]:\n{context_text}" if context_text else ""
+        return f"{meta_msg}{instruction}\n{context_block}\n\n[USER QUERY]:\n{base_prompt}"
