@@ -35,15 +35,17 @@ def test_agent_metrics_integration():
     """Ensure the agent automatically calculates these topological metrics."""
     agent = BaseQuantumAgent(name="TestAgent")
     assert agent.manifold_divergence == 0.0
-    # Vector is dim 16, uniformly initialized -> entropy should be log2(16) = 4.0
-    assert pytest.approx(agent.entropy_coefficient, 0.01) == 4.0
+    # Vector is dim 256 (v2.0), uniformly initialized -> entropy should be log2(256) = 8.0
+    expected_entropy = np.log2(len(agent.knowledge_vector))
+    assert pytest.approx(agent.entropy_coefficient, 0.01) == expected_entropy
     
     # Simulate an evaluation that modifies the knowledge vector
-    agent.knowledge_vector = np.zeros(16)
+    dim = len(agent.knowledge_vector)
+    agent.knowledge_vector = np.zeros(dim)
     agent.knowledge_vector[0] = 1.0 # Collapse to pure state
     
     # Re-evaluate
-    dummy_probs = np.ones(16) / 16.0
+    dummy_probs = np.ones(dim) / float(dim)
     agent.evaluate_state(dummy_probs)
     
     # Entropy should drop to 0

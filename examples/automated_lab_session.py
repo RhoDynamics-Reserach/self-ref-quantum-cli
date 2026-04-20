@@ -12,8 +12,9 @@ import numpy as np
 
 # 1. Mock Embedding Function
 def mock_embed(text: str) -> np.ndarray:
-    """Mock 16-D embedding for speed."""
-    return np.random.rand(16)
+    """Mock embedding for local demonstration."""
+    # Using 384-D for a more realistic mock representation
+    return np.random.rand(384)
 
 def run_experiment():
     print("[*] Initializing RhoDynamics Laboratory...")

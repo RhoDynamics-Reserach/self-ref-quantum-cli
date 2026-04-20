@@ -34,8 +34,8 @@ class BaseQuantumAgent:
         if knowledge_vector is not None:
             self.knowledge_vector = knowledge_vector
         else:
-            # Deterministic initialization baseline
-            self.knowledge_vector = np.ones(16) / np.sqrt(16)
+            # Deterministic initialization baseline (v2.0 Gold: 256 dims)
+            self.knowledge_vector = np.ones(256) / np.sqrt(256)
             
         self.birth_vector = self.knowledge_vector.copy()
             
