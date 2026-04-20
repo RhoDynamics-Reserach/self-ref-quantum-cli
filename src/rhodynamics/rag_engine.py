@@ -56,36 +56,27 @@ class QuantumRAGLayer:
             context_tension = np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
         
         # D. Quantum Confidence Filter
-        zeta_factor = min(2.0, agent.zeta / ZETA_REF)
-        chi_factor = min(2.0, agent.chi_square / CHI_SQUARE_REF)
-        
-        raw_confidence = projection_score * zeta_factor * chi_factor
-        
-        # --- Destructive Interference (Orthogonality Penalty) ---
-        # If the INJECTED context fundamentally disagrees with the task
-        # Adjusted threshold to 0.40 for increased robustness against semantic variance (v4.5)
-        if context_tension < 0.40:
-            # Softer exponential decay penalty (v4.5 Adjustment)
-            ortho_penalty = np.exp(-10.0 * (0.40 - context_tension))
-            raw_confidence *= ortho_penalty
-            
-        # --- Context vs Ground Truth Tension (Epistemic Dissonance) ---
-        # Decouple raw similarity from Epistemic Integrity
-        # base_tension measures how well the context fits the AGENT'S manifold
-        epistemic_gate = 1.0
+        # Primary Signal: Epistemic Integrity (Does context match agent knowledge?)
+        epistemic_signal = 1.0
         if context_vector is not None:
             context_state = text_to_quantum_state(context_vector)
-            base_tension = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
-            
-            # Sharp non-linear penalty for logical contradictions (Epistemic Dissonance)
-            if base_tension < 0.48: # Softened from 0.65 to prevent blocking valid facts
-                epistemic_penalty = np.exp(-20.0 * (0.48 - base_tension)) # Reduced from 35.0
-                epistemic_gate = epistemic_penalty
-                raw_confidence *= epistemic_penalty
+            # base_tension is our 'Truth Signal'
+            epistemic_signal = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
+        
+        # Secondary Signal: Semantic Relevance (Does context match user query?)
+        relevance_signal = projection_score
+        
+        # Composite Confidence (Epistemic-Heavy Weighting v1.3)
+        # We value Truth (Integrity) at 85% and Relevance at 15% to stop 'Sincere Lies'
+        raw_confidence_comp = (0.85 * epistemic_signal) + (0.15 * relevance_signal)
+        
+        # Apply agent internal metrics (Zeta) as scaling factors
+        zeta_factor = min(1.2, agent.zeta / ZETA_REF)
+        final_raw = raw_confidence_comp * zeta_factor
         
         # Final Decision Boundary (Sigmoid-weighted gating)
-        # Shifted midpoint to 0.45 for a more balanced safety/utility policy
-        final_confidence = 1.0 / (1.0 + np.exp(-10.0 * (raw_confidence * epistemic_gate - 0.45)))
+        # Midpoint at 0.50 for scientific calibration
+        final_confidence = 1.0 / (1.0 + np.exp(-12.0 * (final_raw - 0.50)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
@@ -96,7 +87,7 @@ class QuantumRAGLayer:
         return {
             "confidence_score": final_confidence,
             "projection_score": projection_score,
-            "epistemic_dissonance": 1.0 - epistemic_gate,
+            "epistemic_dissonance": 1.0 - epistemic_signal,
             "agent_state": {
                 "zeta": agent.zeta,
                 "fitness": agent.fitness,
