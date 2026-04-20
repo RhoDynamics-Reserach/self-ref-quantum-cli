@@ -45,14 +45,14 @@ def text_to_quantum_state(embedding: np.ndarray, num_qubits: int = 8):
     # This stretches the manifold to separate 'Sincere Lies' from Truths
     feature_mapped = np.sin(linear_projected) * np.cos(linear_projected * 0.5)
     
-    # --- ASYMMETRIC PHASE SENSITIVITY (v2.1 Helix Update) ---
-    # To fix 'Sign-Blindness', we introduce a global bias shift.
-    # This ensures that |x + c|^2 != |-x + c|^2, breaking Born Rule symmetry.
-    epsilon_bias = 0.1
-    asymmetric_shift = feature_mapped + epsilon_bias
+    # --- ASYMMETRIC PHASE SENSITIVITY (v2.1.2 Polarity Shield) ---
+    # To fix 'Sign-Blindness' and preserve semantic resolution, we replace 
+    # simple squaring with an Asymmetric Tanh Projection.
+    # This ensures that |f(x)|^2 != |f(-x)|^2 and boosts semantic margin.
+    asymmetric_shift = np.tanh(feature_mapped) + 1.0
     
     # Quantum-inspired Amplitude-to-Probability mapping
-    probabilities = np.abs(asymmetric_shift) ** 2
+    probabilities = asymmetric_shift ** 2
     
     # Final normalization into a valid probability distribution
     return probabilities / (np.sum(probabilities) + 1e-9)
