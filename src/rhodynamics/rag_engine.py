@@ -56,27 +56,39 @@ class QuantumRAGLayer:
             context_tension = np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
         
         # D. Quantum Confidence Filter
-        # Primary Signal: Epistemic Integrity (Does context match agent knowledge?)
+        # Primary Signal: Epistemic Integrity (Context vs Knowledge)
         epistemic_signal = 1.0
         if context_vector is not None:
             context_state = text_to_quantum_state(context_vector)
-            # base_tension is our 'Truth Signal'
             epistemic_signal = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
         
-        # Secondary Signal: Semantic Relevance (Does context match user query?)
+        # Secondary Signal: Semantic Relevance (Context vs Query)
         relevance_signal = projection_score
         
-        # Composite Confidence (Epistemic-Heavy Weighting v1.3)
-        # We value Truth (Integrity) at 85% and Relevance at 15% to stop 'Sincere Lies'
-        raw_confidence_comp = (0.85 * epistemic_signal) + (0.15 * relevance_signal)
+        # --- NON-LINEAR DISSONANCE ORACLE (v2.5) ---
+        # Integrated with Sin-Cos Feature Mapping for higher contrast
+        t_ref = 0.50 
+        epistemic_gate = 1.0
+        if epistemic_signal < t_ref:
+            # Softer exponential drop (5.0) to account for MiniLM noise
+            epistemic_gate = np.exp(-5.0 * (t_ref - epistemic_signal))
         
-        # Apply agent internal metrics (Zeta) as scaling factors
-        zeta_factor = min(1.2, agent.zeta / ZETA_REF)
-        final_raw = raw_confidence_comp * zeta_factor
+        # --- DYNAMIC MANIFOLD ANCHORING (v3.0) ---
+        # Integrate Zeta (stability) into the decision boundary
+        # A more stable agent (higher zeta) is more 'opinionated' and strict
+        strictness_factor = min(1.5, agent.zeta / ZETA_REF)
         
-        # Final Decision Boundary (Sigmoid-weighted gating)
-        # Midpoint at 0.50 for scientific calibration
-        final_confidence = 1.0 / (1.0 + np.exp(-12.0 * (final_raw - 0.50)))
+        # Composite weighting v3.0 (Zeta-Modulated)
+        # Higher zeta increases the weight of epistemic signal
+        e_weight = 0.85 * strictness_factor
+        r_weight = 1.0 - e_weight
+        
+        raw_confidence_comp = (e_weight * epistemic_signal * epistemic_gate) + (r_weight * relevance_signal)
+        
+        # Final Decision Boundary (Zeta-Anchored Sigmoid)
+        # Midpoint shifted to 0.58 for higher precision cutoff
+        midpoint = 0.58
+        final_confidence = 1.0 / (1.0 + np.exp(-15.0 * (raw_confidence_comp - midpoint)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution

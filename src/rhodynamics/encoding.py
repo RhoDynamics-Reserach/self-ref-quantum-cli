@@ -17,7 +17,7 @@ def amplitude_encoding(vector: np.ndarray):
     
     return probabilities
 
-def text_to_quantum_state(embedding: np.ndarray, num_qubits: int = 4):
+def text_to_quantum_state(embedding: np.ndarray, num_qubits: int = 8):
     """
     Maps a high-dimensional embedding to a target qubit Hilbert space dimension (2^n).
     Uses a more stable pooling method to preserve semantic signals.
@@ -34,17 +34,19 @@ def text_to_quantum_state(embedding: np.ndarray, num_qubits: int = 4):
     norm_emb = (embedding - emp_mean) / emp_std
     
     # Mathematically Rigorous Gaussian Random Projection (JL-Lemma)
-    # Maps high-dimensional embeddings (4096) to Hilbert space (16)
-    # Scaled by 1/sqrt(N) to preserve inner product variance.
+    # Plus a Quantum-inspired Sin-Cos Feature Mapping for Non-Linearity
     gen = np.random.default_rng(42)
     projection_matrix = gen.normal(0, 1.0 / np.sqrt(target_dim), (target_dim, len(norm_emb)))
     
-    # Linear Projection
-    projected_vec = projection_matrix @ norm_emb
+    # 1. Linear Projection
+    linear_projected = projection_matrix @ norm_emb
+    
+    # 2. Non-Linear Feature Mapping (Quantum-inspired Kernel)
+    # This stretches the manifold to separate 'Sincere Lies' from Truths
+    feature_mapped = np.sin(linear_projected) * np.cos(linear_projected * 0.5)
     
     # Quantum-inspired Amplitude-to-Probability mapping (|psi|^2)
-    # This preserves the geometric structure of the original manifold
-    probabilities = np.abs(projected_vec) ** 2
+    probabilities = np.abs(feature_mapped) ** 2
     
     # Final normalization into a valid probability distribution
     return probabilities / (np.sum(probabilities) + 1e-9)
