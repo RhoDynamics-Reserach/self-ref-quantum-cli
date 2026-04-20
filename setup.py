@@ -12,6 +12,8 @@ setup(
         "requests",
         "qiskit>=1.0.0",
         "qiskit-aer",
+        "scikit-learn",
+        "scipy",
         "python-dotenv",
         "rich",
         "matplotlib",
