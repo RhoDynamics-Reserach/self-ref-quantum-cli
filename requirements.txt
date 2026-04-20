@@ -12,6 +12,8 @@ rich
 pandas
 seaborn
 sentence-transformers
+scikit-learn
+scipy
 wheel
 build
 openai
