@@ -15,13 +15,19 @@ def test_package_import_smoke():
     assert QuantumHardwareConnector is not None
 
 def test_end_to_end_chatbot_flow(mock_embedding):
-    """
-    Simulates a full chatbot integration cycle:
-    1. Middleware initialization with semantic mock.
-    2. Agent creation.
-    3. Context-aware query processing (Valid vs Invalid).
-    """
-    middleware = QuantumMiddleware(embedding_function=mock_embedding)
+    # 1. Custom Semantic Mock
+    # To prevent random noise from failing the test across different OS or NumPy versions,
+    # we explicitly simulate semantic similarity.
+    def semantic_mock(text):
+        import numpy as np
+        if "France" in text:
+            return np.ones(256) * 0.8
+        elif "England" in text:
+            return np.ones(256) * -0.8
+        else:
+            return np.ones(256) * 0.5
+            
+    middleware = QuantumMiddleware(embedding_function=semantic_mock)
     agent = middleware.create_agent("E2E-Agent", seed=100)
     
     context = "The capital of France is Paris."
