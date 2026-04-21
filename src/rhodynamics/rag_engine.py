@@ -47,23 +47,26 @@ class QuantumRAGLayer:
         norm_task = np.linalg.norm(task_prob_dist)
         norm_agent = np.linalg.norm(knowledge)
         
-        projection_score = dot_product / (norm_task * norm_agent + 1e-9)
+        # Born Rule: Probability is the square of the Amplitude (Dot Product)
+        projection_score = (dot_product / (norm_task * norm_agent + 1e-9)) ** 2
         
         context_tension = projection_score
         if context_vector is not None:
             context_state = text_to_quantum_state(context_vector) # Re-calculating for clarity or reuse
             c_norm = np.linalg.norm(context_state)
-            context_tension = np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
+            context_tension = (np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)) ** 2
         
         # D. Quantum Confidence Filter
         # Primary Signal: Epistemic Integrity (Context vs Knowledge)
         epistemic_signal = 1.0
         if context_vector is not None:
             context_state = text_to_quantum_state(context_vector)
-            epistemic_signal = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
+            # Born Rule again
+            epistemic_signal = (np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)) ** 2
         
         # Secondary Signal: Semantic Relevance (Context vs Query)
-        relevance_signal = projection_score
+        # If context is provided, measure pure direct relevance (task vs context) without agent memory dilution
+        relevance_signal = context_tension if context_vector is not None else projection_score
         
         # --- NON-LINEAR DISSONANCE ORACLE (v2.5) ---
         # Integrated with Sin-Cos Feature Mapping for higher contrast
@@ -79,16 +82,18 @@ class QuantumRAGLayer:
         strictness_factor = min(1.5, agent.zeta / ZETA_REF)
         
         # Composite weighting v3.0 (Zeta-Modulated)
-        # Higher zeta increases the weight of epistemic signal
-        e_weight = 0.85 * strictness_factor
+        # Shifted to a 40/60 split for base agents to prevent epistemic signal from 
+        # completely drowning out the semantic task tension.
+        e_weight = 0.40 * strictness_factor
         r_weight = 1.0 - e_weight
         
         raw_confidence_comp = (e_weight * epistemic_signal * epistemic_gate) + (r_weight * relevance_signal)
         
         # Final Decision Boundary (Zeta-Anchored Sigmoid)
-        # Softened steepness from 15.0 to 8.0 to expand readability margins
-        midpoint = 0.58
-        final_confidence = 1.0 / (1.0 + np.exp(-8.0 * (raw_confidence_comp - midpoint)))
+        # Shifted midpoint to 0.82 to bracket high-dimensional sentence embedding norms
+        # Steepness set to 25.0 to force sharp separation between Truth (>0.80) and Hallucination (<0.35)
+        midpoint = 0.82
+        final_confidence = 1.0 / (1.0 + np.exp(-25.0 * (raw_confidence_comp - midpoint)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
