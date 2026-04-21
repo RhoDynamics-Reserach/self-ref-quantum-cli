@@ -70,8 +70,8 @@ class QuantumRAGLayer:
         t_ref = 0.50 
         epistemic_gate = 1.0
         if epistemic_signal < t_ref:
-            # Softer exponential drop (5.0) to account for MiniLM noise
-            epistemic_gate = np.exp(-5.0 * (t_ref - epistemic_signal))
+            # Aggressive Cubic Penalty for Hallucinations
+            epistemic_gate = np.exp(-12.0 * ((t_ref - epistemic_signal)**3))
         
         # --- DYNAMIC MANIFOLD ANCHORING (v3.0) ---
         # Integrate Zeta (stability) into the decision boundary
@@ -86,9 +86,9 @@ class QuantumRAGLayer:
         raw_confidence_comp = (e_weight * epistemic_signal * epistemic_gate) + (r_weight * relevance_signal)
         
         # Final Decision Boundary (Zeta-Anchored Sigmoid)
-        # Midpoint shifted to 0.58 for higher precision cutoff
+        # Softened steepness from 15.0 to 8.0 to expand readability margins
         midpoint = 0.58
-        final_confidence = 1.0 / (1.0 + np.exp(-15.0 * (raw_confidence_comp - midpoint)))
+        final_confidence = 1.0 / (1.0 + np.exp(-8.0 * (raw_confidence_comp - midpoint)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
