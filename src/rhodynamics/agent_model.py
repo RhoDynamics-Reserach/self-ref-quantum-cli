@@ -50,30 +50,35 @@ class BaseQuantumAgent:
         self.manifold_divergence = 0.0
         self.entropy_coefficient = calculate_entropy_coefficient(self.knowledge_vector)
         
-    def evaluate_state(self, current_state_probs: np.ndarray):
+    def evaluate_state(self, current_state_amplitudes: np.ndarray):
         """
         Updates the agent's internal success metrics based on current task performance.
+        Applies the Born Rule (measurement) to collapse amplitudes into probabilities.
         Now supports Real QPU execution if an executor is provided.
         """
         shots = 1024 # Standard benchmark
         
+        # Born Rule: Convert amplitudes to probabilities for measurement
+        probs = np.abs(current_state_amplitudes) ** 2
+        probs = probs / (np.sum(probs) + 1e-9)
+        
         if self.executor and hasattr(self.executor, 'run_measurement'):
-            outcomes = self.executor.run_measurement(current_state_probs, shots)
+            outcomes = self.executor.run_measurement(probs, shots)
         elif callable(self.executor):
-            outcomes = self.executor(current_state_probs, shots)
+            outcomes = self.executor(probs, shots)
         else:
             # Seeded multinomial sampling
             if self.seed is not None:
-                outcomes = self.rng.multinomial(shots, current_state_probs)
+                outcomes = self.rng.multinomial(shots, probs)
             else:
-                outcomes = np.random.multinomial(shots, current_state_probs)
+                outcomes = np.random.multinomial(shots, probs)
             
         self.chi_square = calculate_chi_square(outcomes, shots)
         
         # B. Memory Kernel (Update Zeta/Stability)
         zeta_base = calculate_zeta(self.gamma, self.gamma_decoherence, self.tau_m)
-        self.memory.add_state(current_state_probs)
-        mem_effect = self.memory.get_memory_effect(current_state_probs)
+        self.memory.add_state(probs)
+        mem_effect = self.memory.get_memory_effect(probs)
         self.zeta = update_stability_dynamically(zeta_base, mem_effect)
         
         # C. Total Fitness
