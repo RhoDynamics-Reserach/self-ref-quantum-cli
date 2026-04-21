@@ -1,7 +1,6 @@
 import pytest
 import requests
 import os
-from rhodynamics.hardware_connector import QuantumHardwareConnector
 
 # --- Service Availability Checks ---
 
@@ -15,9 +14,12 @@ def check_ollama():
 
 def check_ibm():
     try:
+        from rhodynamics.hardware_connector import QuantumHardwareConnector
         connector = QuantumHardwareConnector()
         return connector.is_real_hardware()
-    except:
+    except ImportError:
+        return False
+    except Exception:
         return False
 
 # --- Pytest Hooks/Markers ---

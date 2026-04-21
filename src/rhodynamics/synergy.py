@@ -27,16 +27,23 @@ class QuantumSynergyEngine:
             raise ValueError(f"Agent dimension mismatch: {len(vec_A)} vs {len(vec_B)}")
             
         # 1. Synergy Integral ($S_{int}$) Calculus
-        # Interference between the two normalized cognitive vectors
+        # DEEP ENTANGLEMENT: Density Matrix Fidelity Measurement
+        # Replacing classical 1D vector cosine similarity with quantum state tensors.
         norm_A = np.linalg.norm(vec_A)
         norm_B = np.linalg.norm(vec_B)
         
         s_int = 0.0
         if norm_A > 0 and norm_B > 0:
-            # The Quantum Phase Match (Dot Product)
-            # High s_int -> Constructive (Synergy)
-            # Low/Negative s_int -> Destructive (Conflict)
-            s_int = float(np.dot(vec_A, vec_B) / (norm_A * norm_B))
+            norm_vec_A = vec_A / norm_A
+            norm_vec_B = vec_B / norm_B
+            
+            # Construct pure state density matrices (\rho = |v><v|)
+            rho_A = np.outer(norm_vec_A, norm_vec_A)
+            rho_B = np.outer(norm_vec_B, norm_vec_B)
+            
+            # Fidelity / Trace Overlap of the Density Matrices: Tr(\rho_A \rho_B)
+            overlap_matrix = np.dot(rho_A, rho_B)
+            s_int = float(np.trace(overlap_matrix))
             
         # 2. Non-Linear Superposition Merging (Hadamard Fusion)
         # linear base

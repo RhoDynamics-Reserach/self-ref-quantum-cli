@@ -127,6 +127,22 @@ class BaseQuantumAgent:
         self.tau_m = float(np.clip(self.tau_m + plasticity_shift, 0.5, 5.0))
         self.memory.decay_rate = self.tau_m  # Sync memory buffer
         
+        # 3. Representation Learning (Vector Drift)
+        # Deeply entangles the agent's core memory with the new truth.
+        if hasattr(self, '_last_context_state') and self._last_context_state is not None:
+            if current_fit > 0.5:
+                # Drift gently towards high-confidence knowledge (Learning)
+                drift_factor = actual_lr * 0.1 * (current_fit - 0.5)
+                self.knowledge_vector = (1.0 - drift_factor) * self.knowledge_vector + (drift_factor * self._last_context_state)
+            else:
+                # Drift slightly away from dissonant/hallucinated inputs (Rejection)
+                drift_factor = actual_lr * 0.05 * (0.5 - current_fit)
+                self.knowledge_vector = (1.0 + drift_factor) * self.knowledge_vector - (drift_factor * self._last_context_state)
+                
+            # Guarantee topological shape remains a valid quantum unit vector
+            norm_kv = np.linalg.norm(self.knowledge_vector)
+            if norm_kv > 0: self.knowledge_vector /= norm_kv
+        
         return self.theta, self.gamma, actual_lr
 
     def generate_cognitive_monologue(self) -> str:
