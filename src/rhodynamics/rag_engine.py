@@ -90,10 +90,10 @@ class QuantumRAGLayer:
         raw_confidence_comp = (e_weight * epistemic_signal * epistemic_gate) + (r_weight * relevance_signal)
         
         # Final Decision Boundary (Zeta-Anchored Sigmoid)
-        # Shifted midpoint to 0.82 to bracket high-dimensional sentence embedding norms
-        # Steepness set to 25.0 to force sharp separation between Truth (>0.80) and Hallucination (<0.35)
-        midpoint = 0.82
-        final_confidence = 1.0 / (1.0 + np.exp(-25.0 * (raw_confidence_comp - midpoint)))
+        # Shifted midpoint to 0.68 to accommodate natural linguistic variance (paraphrasing).
+        # Steepness set to 18.0 to maintain a sharp drop-off for actual hallucinations (<0.60 raw overlap).
+        midpoint = 0.68
+        final_confidence = 1.0 / (1.0 + np.exp(-18.0 * (raw_confidence_comp - midpoint)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
