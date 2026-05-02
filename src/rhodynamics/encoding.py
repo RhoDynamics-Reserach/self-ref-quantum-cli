@@ -47,8 +47,8 @@ def text_to_quantum_state(embedding: np.ndarray, num_qubits: int = 8):
     
     # --- ASYMMETRIC PHASE SENSITIVITY (v2.1.2 Polarity Shield) ---
     # To fix 'Sign-Blindness' and preserve semantic resolution, we apply an 
-    # Asymmetric Tanh Projection.
-    asymmetric_shift = np.tanh(feature_mapped) + 1.0
+    # Asymmetric Tanh Projection. We allow negative amplitudes to preserve phase opposition.
+    asymmetric_shift = np.tanh(feature_mapped)
     
     # Return Pure Quantum State (Amplitudes) - L2 Normalized
     # The Born Rule (squaring) is moved to the RAG Engine during overlap measurement.

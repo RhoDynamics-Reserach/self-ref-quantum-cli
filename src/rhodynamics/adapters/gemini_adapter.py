@@ -8,8 +8,10 @@ class GeminiAdapter:
     """
     def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
         self.api_key = api_key
-        self.model_name = model_name
-        self.url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={self.api_key}"
+        # Normalize model name and handle URL construction
+        base_model = model_name if model_name.startswith("models/") else f"models/{model_name}"
+        self.url = f"https://generativelanguage.googleapis.com/v1/{{base_model}}:generateContent?key={{self.api_key}}".replace("{base_model}", base_model).replace("{self.api_key}", self.api_key)
+
 
     def embed(self, text: str) -> np.ndarray:
         """Determinstic semantic fingerprint fallback for Gemini mode."""

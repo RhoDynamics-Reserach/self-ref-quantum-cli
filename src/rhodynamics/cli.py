@@ -142,8 +142,9 @@ class RhoDynamicsCLI(cmd.Cmd):
             self.storage.log_interaction(name, agent.zeta)
             self.storage.save_agent(agent)
             
-        # Silent Guardian Logic: Only alert on risk
-        if qcs < 0.50:
+        # Silent Guardian Logic: Balanced for Research v2.1
+        if qcs < 0.30:
+
             console.print(Panel(
                 f"[bold red]HALLUCINATION RISK DETECTED[/bold red]\n"
                 f"Quantum Confidence Score (QCS): [bold]{qcs:.4f}[/bold]\n"

@@ -42,39 +42,44 @@ class QuantumRAGLayer:
             if norm_k > 0: knowledge /= norm_k
 
         # C. Quantum Projection Analysis
-        # Similarity of the task to the current knowledge manifold
         dot_product = np.dot(knowledge, task_prob_dist)
         norm_task = np.linalg.norm(task_prob_dist)
         norm_agent = np.linalg.norm(knowledge)
         
-        # Born Rule: Probability is the square of the Amplitude (Dot Product)
-        projection_score = (dot_product / (norm_task * norm_agent + 1e-9)) ** 2
+        # --- QUANTUM TEMPERATURE SCALING ---
+        # Softens the Born Rule in high-dimensional manifolds to prevent extreme squashing.
+        T = 2.5 
+        
+        # Polarity-Preserving Born Rule with Temperature
+        amplitude = dot_product / (norm_task * norm_agent + 1e-9)
+        projection_score = np.sign(amplitude) * (np.abs(amplitude) ** (2.0 / T))
         
         context_tension = projection_score
         if context_vector is not None:
-            context_state = text_to_quantum_state(context_vector) # Re-calculating for clarity or reuse
+            context_state = text_to_quantum_state(context_vector)
             c_norm = np.linalg.norm(context_state)
-            context_tension = (np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)) ** 2
+            c_amplitude = np.dot(context_state, task_prob_dist) / (c_norm * norm_task + 1e-9)
+            context_tension = np.sign(c_amplitude) * (np.abs(c_amplitude) ** (2.0 / T))
         
         # D. Quantum Confidence Filter
         # Primary Signal: Epistemic Integrity (Context vs Knowledge)
         epistemic_signal = 1.0
         if context_vector is not None:
             context_state = text_to_quantum_state(context_vector)
-            # Born Rule again
-            epistemic_signal = (np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)) ** 2
+            e_amplitude = np.dot(agent.knowledge_vector, context_state) / (np.linalg.norm(agent.knowledge_vector) * np.linalg.norm(context_state) + 1e-9)
+            epistemic_signal = np.sign(e_amplitude) * (np.abs(e_amplitude) ** (2.0 / T))
         
         # Secondary Signal: Semantic Relevance (Context vs Query)
         # If context is provided, measure pure direct relevance (task vs context) without agent memory dilution
         relevance_signal = context_tension if context_vector is not None else projection_score
         
-        # --- NON-LINEAR DISSONANCE ORACLE (v2.5) ---
+        # --- NON-LINEAR DISSONANCE ORACLE (v3.0 Calibrated) ---
         # Integrated with Sin-Cos Feature Mapping for higher contrast
-        t_ref = 0.50 
+        t_ref = 0.30 
         epistemic_gate = 1.0
         if epistemic_signal < t_ref:
             # Aggressive Cubic Penalty for Hallucinations
-            epistemic_gate = np.exp(-12.0 * ((t_ref - epistemic_signal)**3))
+            epistemic_gate = np.exp(-8.0 * ((t_ref - epistemic_signal)**3))
         
         # --- DYNAMIC MANIFOLD ANCHORING (v3.0) ---
         # Integrate Zeta (stability) into the decision boundary
@@ -90,10 +95,10 @@ class QuantumRAGLayer:
         raw_confidence_comp = (e_weight * epistemic_signal * epistemic_gate) + (r_weight * relevance_signal)
         
         # Final Decision Boundary (Zeta-Anchored Sigmoid)
-        # Shifted midpoint to 0.68 to accommodate natural linguistic variance (paraphrasing).
-        # Steepness set to 18.0 to maintain a sharp drop-off for actual hallucinations (<0.60 raw overlap).
-        midpoint = 0.68
-        final_confidence = 1.0 / (1.0 + np.exp(-18.0 * (raw_confidence_comp - midpoint)))
+        # Shifted midpoint to 0.25 to accommodate the softened amplitude.
+        # Steepness set to 15.0 for a highly discriminative S-Curve.
+        midpoint = 0.25
+        final_confidence = 1.0 / (1.0 + np.exp(-15.0 * (raw_confidence_comp - midpoint)))
         final_confidence = float(np.clip(final_confidence, 0.0, 1.0))
         
         # E. Update Agent Metrics & Trigger Evolution
