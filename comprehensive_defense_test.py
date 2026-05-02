@@ -6,7 +6,8 @@ from rhodynamics.synergy import QuantumSynergyEngine
 from rhodynamics.middleware import QuantumMiddleware
 
 # 1. Configuration
-IBM_TOKEN = "mRRY8W_hEDU7VBK9_RUqupfohZjDA88me_7Knpw8yU2s"
+# NEVER commit real tokens. Use environment variables.
+IBM_TOKEN = os.environ.get("IBM_QUANTUM_TOKEN", "dummy_token_for_fallback")
 os.environ["IBM_QUANTUM_TOKEN"] = IBM_TOKEN
 
 print("\n--- RHODYNAMICS COMPREHENSIVE DEFENSE TEST ---")
